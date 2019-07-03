@@ -31,17 +31,17 @@ enum TipoDocumento
 
 class Persona {
 	TipoDocumento tipoDocumento;
-	Integer NroDocumento;
-	String Nombre;
-	String Apellido;
-	Date FechaNacimiento;
+	Integer nroDocumento;
+	String nombre;
+	String apellido;
+	Date fechaNacimiento;
 	
 	public Persona(TipoDocumento newTipoDocumento, Integer newNroDocumento, String newNombre, String newApellido, Date newFechaNacimiento) {
 		tipoDocumento = newTipoDocumento;
-		NroDocumento = newNroDocumento;
-		Nombre = newNombre;
-		Apellido = newApellido;
-		FechaNacimiento = newFechaNacimiento;
+		nroDocumento = newNroDocumento;
+		nombre = newNombre;
+		apellido = newApellido;
+		fechaNacimiento = newFechaNacimiento;
 	}
 	
 	public TipoDocumento getTipoDocumento() {
@@ -53,35 +53,35 @@ class Persona {
 	}
 
 	public Integer getNroDocumento() {
-		return NroDocumento;
+		return nroDocumento;
 	}
 	
 	public void setNroDocumento(Integer newNroDocumento) {
-		this.NroDocumento = newNroDocumento;
+		this.nroDocumento = newNroDocumento;
 	}
 
 	public String getNombre() {
-		return Nombre;
+		return nombre;
 	}
 	
 	public void setNombre(String newNombre) {
-		this.Nombre = newNombre;
+		this.nombre = newNombre;
 	}
 
 	public String getApellido() {
-		return Apellido;
+		return apellido;
 	}
 	
 	public void setApellido(String newApellido) {
-		this.Apellido = newApellido;
+		this.apellido = newApellido;
 	}
 
 	public Date getFechaNacimiento() {
-		return FechaNacimiento;
+		return fechaNacimiento;
 	}
 	
 	public void setFechaNacimiento(Date newFechaNacimiento) {
-		this.FechaNacimiento = newFechaNacimiento;
+		this.fechaNacimiento = newFechaNacimiento;
 	}
 }
 

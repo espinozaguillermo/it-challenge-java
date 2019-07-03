@@ -14,6 +14,34 @@ package ejercicios;
  * @author examen
  *
  */
+
+class Alumno {
+	Persona persona;
+	Integer legajo;
+	
+	public Alumno(Persona newPersona, Integer newLegajo) {
+		persona = newPersona;
+		legajo = newLegajo;
+	}
+	
+	public Persona getPersona() {
+		return persona;
+	}
+	
+	public void setPersona(Persona newPersona) {
+		this.persona = newPersona;
+	}
+	
+	public Integer getLegajo() {
+		return legajo;
+	}
+	
+	public void setLegajo(Integer newLegajo) {
+		this.legajo = newLegajo;
+	}
+	
+}
+
 public class Ejercicio3 {
 
 	/**

@@ -22,9 +22,21 @@ public class Ejercicio1 {
 	    public void incrementa2() {
 	    	count2++;
 	    }
-
-	    public static void incrementa() {
+	    
+	    //CAMBIO: saque la palabra static del metodo
+	    //ya que count1 no es static
+	    public void incrementa() {
 	    	count1++;
 	    }
+	    
+	    /**
+	     * CAMBIO: Agregué método main
+		 * @param args
+		 */
+		public static void main(String[] args) {
+			Ejercicio1 ejercicio = new Ejercicio1();
+			System.out.println(ejercicio.count1);
+			System.out.println(ejercicio.count2);
+		}
 
 }

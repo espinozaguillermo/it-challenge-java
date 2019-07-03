@@ -1,5 +1,10 @@
 package ejercicios;
 
+import java.util.Date;
+import java.lang.Integer;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
 /**
  * A. Crear una clase Persona con los siguientes campos
  * (con sus respectivos getters, setters y constructor)
@@ -17,9 +22,71 @@ package ejercicios;
  * C. En el método main de la clase "Ejercicio 2" imprimir los valores en 
  * consola 
  * (crear método main e imprimir valores) 
- *  
+ */
+
+enum TipoDocumento
+{
+	DNI, LIBRETACIVICA;
+}
+
+class Persona {
+	TipoDocumento tipoDocumento;
+	Integer NroDocumento;
+	String Nombre;
+	String Apellido;
+	Date FechaNacimiento;
+	
+	public Persona(TipoDocumento newTipoDocumento, Integer newNroDocumento, String newNombre, String newApellido, Date newFechaNacimiento) {
+		tipoDocumento = newTipoDocumento;
+		NroDocumento = newNroDocumento;
+		Nombre = newNombre;
+		Apellido = newApellido;
+		FechaNacimiento = newFechaNacimiento;
+	}
+	
+	public TipoDocumento getTipoDocumento() {
+		return tipoDocumento;
+	}
+	
+	public void setTipoDocumento(TipoDocumento newTipoDocumento) {
+		this.tipoDocumento = newTipoDocumento;
+	}
+
+	public Integer getNroDocumento() {
+		return NroDocumento;
+	}
+	
+	public void setNroDocumento(Integer newNroDocumento) {
+		this.NroDocumento = newNroDocumento;
+	}
+
+	public String getNombre() {
+		return Nombre;
+	}
+	
+	public void setNombre(String newNombre) {
+		this.Nombre = newNombre;
+	}
+
+	public String getApellido() {
+		return Apellido;
+	}
+	
+	public void setApellido(String newApellido) {
+		this.Apellido = newApellido;
+	}
+
+	public Date getFechaNacimiento() {
+		return FechaNacimiento;
+	}
+	
+	public void setFechaNacimiento(Date newFechaNacimiento) {
+		this.FechaNacimiento = newFechaNacimiento;
+	}
+}
+
+/**
  * @author examen
- *
  */
 public class Ejercicio2 {
 
@@ -34,8 +101,20 @@ public class Ejercicio2 {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
+		try {
+			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+			Date date = simpleDateFormat.parse("1986-03-20");
+			Persona newPersona = new Persona(TipoDocumento.DNI, 3208682, "Guillermo", "Espinoza", date);
+			
+			System.out.println(newPersona.getTipoDocumento());
+			System.out.println(newPersona.getNroDocumento());
+			System.out.println(newPersona.getNombre());
+			System.out.println(newPersona.getApellido());
+			System.out.println(newPersona.getFechaNacimiento());
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }

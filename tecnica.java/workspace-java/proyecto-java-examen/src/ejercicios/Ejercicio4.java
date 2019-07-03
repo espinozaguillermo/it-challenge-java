@@ -2,6 +2,7 @@ package ejercicios;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class Ejercicio4 {
@@ -52,6 +53,24 @@ public class Ejercicio4 {
 	private static void informacion(List<Integer> lista1, Integer numero) {
 		// TODO: explicar salidas de los system out y sugerir alguna mejora a la implementacion
 		
+		// Las salidas se explican con los mensajes de cada system out
+		/**
+		 * Mejora: en un solo bucle for hacer los 3 if
+		 * for (Integer n: lista1) {
+		 *	if (n % 2 == 0) {
+		 *		pares = pares + 1;
+		 *	}
+		 *	if (n % 2 != 0) {
+		 *		impares.add(n);
+		 *	}
+		 *	if (n > numero) {
+		 *		c = c + 1;
+		 *	}
+		 * }
+		 */
+		
+		System.out.println("Valores Lista1: " + lista1.toString());
+		
 		int pares = 0;
 		for (Integer n: lista1) {
 			if (n % 2 == 0) {
@@ -59,7 +78,7 @@ public class Ejercicio4 {
 			}
 		}
 		
-		System.out.println("... " + pares);
+		System.out.println("Total de numeros pares: " + pares);
 		
 		List<Integer> impares = new ArrayList<Integer>();
 		for (Integer n: lista1) {
@@ -68,24 +87,26 @@ public class Ejercicio4 {
 			}
 		}
 		
-		System.out.println("... " + impares.toString());
+		System.out.println("Lista de numeros impares: " + impares.toString());
 		
 		int p = lista1.size() / 2;
 		
-		System.out.println("..." + lista1.indexOf(p));
+		System.out.println("Indice del valor " + p + " en la lista1: " + lista1.indexOf(p));
 		
+		// sumatoria de valores de la lista1 mayores al argumento numero
 		int c = 0;
 		for (Integer n: lista1) {
 			if (n > numero) {
 				c = c + 1;
 			}
 		}
+		System.out.println("La sumatoria de valores de la lista1 mayores al argumento numero " + numero + " es: " + c);
 		if (c > lista1.size() / 2) {
-			System.out.println("...");
+			System.out.println("y es mayor al tamanio de lista1 / 2");
 		} else if (c > 0) {
-			System.out.println("...");
+			System.out.println("y es mayor a 0");
 		} else {
-			System.out.println("...");
+			System.out.println("y es menor o igual al tamanio de lista1 / 2 o menor o igual a 0");
 		}
 	}
 
@@ -99,9 +120,13 @@ public class Ejercicio4 {
 	private static List<Integer> unionListas(List<Integer> lista1, List<Integer> lista2) {
 		// TODO: corregir el metodo para que funcione correctamente 
 		
-		List<Integer> union = null;
+		List<Integer> union = new ArrayList<Integer>(lista1.size());
 		
-		union.addAll(lista1);
+		for (Integer m: lista1) {
+			if (!union.contains(m)) {
+				union.add(m);
+			}
+		}
 		
 		for (Integer m: lista2) {
 			if (!union.contains(m)) {
@@ -120,8 +145,15 @@ public class Ejercicio4 {
 	 * 
 	 */
 	private static List<Integer> interseccionListas(List<Integer> lista1, List<Integer> lista2) {
-		// TODO:
-		return new ArrayList<Integer>();
+        List<Integer> interseccion = new ArrayList<Integer>(lista1.size());
+		
+		for (Integer m: lista1) {
+			if (!interseccion.contains(m) && lista2.contains(m)) {
+				interseccion.add(m);
+			}
+		}
+		
+		return interseccion;
 	}
 
 	/***
@@ -131,8 +163,10 @@ public class Ejercicio4 {
 	 * 
 	 */
 	private static List<Integer> ordenaListaAscendente(List<Integer> lista1) {
-		// TODO:
-		return new ArrayList<Integer>();
+		List<Integer> listaOrdenada = ((List) ((ArrayList) lista1).clone());
+		Collections.sort(listaOrdenada);
+		
+		return listaOrdenada;
 	}
 
 	/***
@@ -142,8 +176,11 @@ public class Ejercicio4 {
 	 * 
 	 */
 	private static List<Integer> ordenaListaDescendente(List<Integer> lista2) {
-		// TODO:
-		return new ArrayList<Integer>();
+		List<Integer> listaOrdenada = ((List) ((ArrayList) lista2).clone());;
+		Collections.sort(listaOrdenada);
+		Collections.reverse(listaOrdenada);
+		
+		return listaOrdenada;
 	}
 
 	/***
@@ -156,8 +193,19 @@ public class Ejercicio4 {
 	 * 
 	 */
 	private static boolean tienenMismoContenido(List<Integer> lista1, List<Integer> lista2) {
-		// TODO:		
-		return true;
+		if (lista1.size() == lista2.size()) {
+			int index = 0;
+			for (Integer m: lista1) {
+				if (lista2.get(index) != m) {
+					return false;
+				}
+				index++;
+			}
+				
+			return true;
+		}
+		
+		return false;
 	}
 
 }

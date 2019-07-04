@@ -176,7 +176,7 @@ public class Ejercicio4 {
 	 * 
 	 */
 	private static List<Integer> ordenaListaDescendente(List<Integer> lista2) {
-		List<Integer> listaOrdenada = ((List) ((ArrayList) lista2).clone());;
+		List<Integer> listaOrdenada = ((List) ((ArrayList) lista2).clone());
 		Collections.sort(listaOrdenada);
 		Collections.reverse(listaOrdenada);
 		

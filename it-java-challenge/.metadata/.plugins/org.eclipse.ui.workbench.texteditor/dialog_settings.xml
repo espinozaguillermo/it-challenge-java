@@ -6,14 +6,17 @@
 		<item key="wholeword" value="false"/>
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
+		<item key="selection" value="framework"/>
 		<list key="findhistory">
+			<item value="framework"/>
+			<item value="swagger"/>
 		</list>
 		<list key="replacehistory">
 		</list>
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
-		<item key="DIALOG_X_ORIGIN" value="488"/>
-		<item key="DIALOG_Y_ORIGIN" value="97"/>
+		<item key="DIALOG_X_ORIGIN" value="83"/>
+		<item key="DIALOG_Y_ORIGIN" value="275"/>
 		<item key="DIALOG_WIDTH" value="342"/>
 		<item key="DIALOG_HEIGHT" value="434"/>
 		<item key="DIALOG_FONT_NAME" value="1|Ubuntu|11.0|0|GTK|1|"/>

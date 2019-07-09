@@ -6157,3 +6157,207 @@ java.util.concurrent.TimeoutException
 	at org.eclipse.jdt.internal.ui.text.java.hover.BestMatchHover.getHoverInfo2(BestMatchHover.java:133)
 	at org.eclipse.jdt.internal.ui.text.java.hover.JavaEditorTextHoverProxy.getHoverInfo2(JavaEditorTextHoverProxy.java:89)
 	at org.eclipse.jface.text.TextViewerHoverManager$4.run(TextViewerHoverManager.java:169)
+!SESSION 2019-07-09 14:46:49.334 -----------------------------------------------
+eclipse.buildId=4.12.0.I20190605-1800
+java.version=1.8.0_211
+java.vendor=Oracle Corporation
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=es_AR
+Framework arguments:  -product org.eclipse.epp.package.java.product
+Command-line arguments:  -os linux -ws gtk -arch x86_64 -product org.eclipse.epp.package.java.product
+
+!ENTRY org.springframework.ide.eclipse.boot.wizard 4 0 2019-07-09 14:46:52.209
+!MESSAGE FrameworkEvent ERROR
+!STACK 0
+org.osgi.framework.BundleException: Could not resolve module: org.springframework.ide.eclipse.boot.wizard [514]
+  Unresolved requirement: Require-Bundle: org.springsource.ide.eclipse.commons.browser; bundle-version="[3.5.0,4.0.0)"; resolution:="optional"
+  Bundle was not resolved because of a uses constraint violation.
+  org.apache.felix.resolver.reason.ReasonException: Uses constraint violation. Unable to resolve resource org.springframework.ide.eclipse.boot.wizard [osgi.identity; type="osgi.bundle"; version:Version="3.9.9.201906180643-RELEASE"; osgi.identity="org.springframework.ide.eclipse.boot.wizard"; singleton:="true"] because it is exposed to package 'javax.xml.bind.annotation' from resources org.eclipse.osgi [osgi.identity; type="osgi.bundle"; version:Version="3.14.0.v20190517-1309"; osgi.identity="org.eclipse.osgi"; singleton:="true"] and javax.xml.bind [osgi.identity; type="osgi.bundle"; version:Version="2.2.0.v201105210648"; osgi.identity="javax.xml.bind"] via two dependency chains.
+
+Chain 1:
+  org.springframework.ide.eclipse.boot.wizard [osgi.identity; type="osgi.bundle"; version:Version="3.9.9.201906180643-RELEASE"; osgi.identity="org.springframework.ide.eclipse.boot.wizard"; singleton:="true"]
+    require: (osgi.wiring.bundle=org.eclipse.core.runtime)
+     |
+    provide: osgi.wiring.bundle: org.eclipse.core.runtime
+  org.eclipse.osgi [osgi.identity; type="osgi.bundle"; version:Version="3.14.0.v20190517-1309"; osgi.identity="org.eclipse.osgi"; singleton:="true"]
+
+Chain 2:
+  org.springframework.ide.eclipse.boot.wizard [osgi.identity; type="osgi.bundle"; version:Version="3.9.9.201906180643-RELEASE"; osgi.identity="org.springframework.ide.eclipse.boot.wizard"; singleton:="true"]
+    import: (&(osgi.wiring.package=javax.ws.rs)(version>=2.0.1))
+     |
+    export: osgi.wiring.package=javax.ws.rs; uses:=javax.xml.bind.annotation
+  javax.ws.rs [osgi.identity; type="osgi.bundle"; version:Version="2.0.1.v201504171603"; osgi.identity="javax.ws.rs"]
+    import: (&(osgi.wiring.package=javax.xml.bind.annotation)(&(version>=2.2.0)(!(version>=3.0.0))))
+     |
+    export: osgi.wiring.package: javax.xml.bind.annotation
+  javax.xml.bind [osgi.identity; type="osgi.bundle"; version:Version="2.2.0.v201105210648"; osgi.identity="javax.xml.bind"]
+	at org.eclipse.osgi.container.Module.start(Module.java:457)
+	at org.eclipse.osgi.container.ModuleContainer$ContainerStartLevel$1.run(ModuleContainer.java:1820)
+	at org.eclipse.osgi.internal.framework.EquinoxContainerAdaptor$2$1.execute(EquinoxContainerAdaptor.java:150)
+	at org.eclipse.osgi.container.ModuleContainer$ContainerStartLevel.incStartLevel(ModuleContainer.java:1813)
+	at org.eclipse.osgi.container.ModuleContainer$ContainerStartLevel.incStartLevel(ModuleContainer.java:1769)
+	at org.eclipse.osgi.container.ModuleContainer$ContainerStartLevel.doContainerStartLevel(ModuleContainer.java:1735)
+	at org.eclipse.osgi.container.ModuleContainer$ContainerStartLevel.dispatchEvent(ModuleContainer.java:1661)
+	at org.eclipse.osgi.container.ModuleContainer$ContainerStartLevel.dispatchEvent(ModuleContainer.java:1)
+	at org.eclipse.osgi.framework.eventmgr.EventManager.dispatchEvent(EventManager.java:234)
+	at org.eclipse.osgi.framework.eventmgr.EventManager$EventThread.run(EventManager.java:345)
+
+!ENTRY org.springframework.ide.eclipse.buildship20 4 0 2019-07-09 14:46:52.272
+!MESSAGE FrameworkEvent ERROR
+!STACK 0
+org.osgi.framework.BundleException: Could not resolve module: org.springframework.ide.eclipse.buildship20 [515]
+  Unresolved requirement: Require-Bundle: org.eclipse.buildship.core; bundle-version="[2.0.0,3.0.0)"; resolution:="optional"
+  Unresolved requirement: Require-Bundle: com.gradleware.tooling.model; resolution:="optional"
+  Unresolved requirement: Require-Bundle: org.springframework.ide.eclipse.boot.wizard
+    -> Bundle-SymbolicName: org.springframework.ide.eclipse.boot.wizard; bundle-version="3.9.9.201906180643-RELEASE"; singleton:="true"
+       org.springframework.ide.eclipse.boot.wizard [514]
+         Unresolved requirement: Require-Bundle: org.springsource.ide.eclipse.commons.browser; bundle-version="[3.5.0,4.0.0)"; resolution:="optional"
+  Bundle was not resolved because of a uses constraint violation.
+  org.apache.felix.resolver.reason.ReasonException: Uses constraint violation. Unable to resolve resource org.springframework.ide.eclipse.boot.wizard [osgi.identity; type="osgi.bundle"; version:Version="3.9.9.201906180643-RELEASE"; osgi.identity="org.springframework.ide.eclipse.boot.wizard"; singleton:="true"] because it is exposed to package 'javax.xml.bind.annotation' from resources org.eclipse.osgi [osgi.identity; type="osgi.bundle"; version:Version="3.14.0.v20190517-1309"; osgi.identity="org.eclipse.osgi"; singleton:="true"] and javax.xml.bind [osgi.identity; type="osgi.bundle"; version:Version="2.2.0.v201105210648"; osgi.identity="javax.xml.bind"] via two dependency chains.
+
+Chain 1:
+  org.springframework.ide.eclipse.boot.wizard [osgi.identity; type="osgi.bundle"; version:Version="3.9.9.201906180643-RELEASE"; osgi.identity="org.springframework.ide.eclipse.boot.wizard"; singleton:="true"]
+    require: (osgi.wiring.bundle=org.eclipse.core.runtime)
+     |
+    provide: osgi.wiring.bundle: org.eclipse.core.runtime
+  org.eclipse.osgi [osgi.identity; type="osgi.bundle"; version:Version="3.14.0.v20190517-1309"; osgi.identity="org.eclipse.osgi"; singleton:="true"]
+
+Chain 2:
+  org.springframework.ide.eclipse.boot.wizard [osgi.identity; type="osgi.bundle"; version:Version="3.9.9.201906180643-RELEASE"; osgi.identity="org.springframework.ide.eclipse.boot.wizard"; singleton:="true"]
+    import: (&(osgi.wiring.package=javax.ws.rs)(version>=2.0.1))
+     |
+    export: osgi.wiring.package=javax.ws.rs; uses:=javax.xml.bind.annotation
+  javax.ws.rs [osgi.identity; type="osgi.bundle"; version:Version="2.0.1.v201504171603"; osgi.identity="javax.ws.rs"]
+    import: (&(osgi.wiring.package=javax.xml.bind.annotation)(&(version>=2.2.0)(!(version>=3.0.0))))
+     |
+    export: osgi.wiring.package: javax.xml.bind.annotation
+  javax.xml.bind [osgi.identity; type="osgi.bundle"; version:Version="2.2.0.v201105210648"; osgi.identity="javax.xml.bind"]
+	at org.eclipse.osgi.container.Module.start(Module.java:457)
+	at org.eclipse.osgi.container.ModuleContainer$ContainerStartLevel$1.run(ModuleContainer.java:1820)
+	at org.eclipse.osgi.internal.framework.EquinoxContainerAdaptor$2$1.execute(EquinoxContainerAdaptor.java:150)
+	at org.eclipse.osgi.container.ModuleContainer$ContainerStartLevel.incStartLevel(ModuleContainer.java:1813)
+	at org.eclipse.osgi.container.ModuleContainer$ContainerStartLevel.incStartLevel(ModuleContainer.java:1769)
+	at org.eclipse.osgi.container.ModuleContainer$ContainerStartLevel.doContainerStartLevel(ModuleContainer.java:1735)
+	at org.eclipse.osgi.container.ModuleContainer$ContainerStartLevel.dispatchEvent(ModuleContainer.java:1661)
+	at org.eclipse.osgi.container.ModuleContainer$ContainerStartLevel.dispatchEvent(ModuleContainer.java:1)
+	at org.eclipse.osgi.framework.eventmgr.EventManager.dispatchEvent(EventManager.java:234)
+	at org.eclipse.osgi.framework.eventmgr.EventManager$EventThread.run(EventManager.java:345)
+
+!ENTRY org.springframework.ide.eclipse.buildship30 4 0 2019-07-09 14:46:52.365
+!MESSAGE FrameworkEvent ERROR
+!STACK 0
+org.osgi.framework.BundleException: Could not resolve module: org.springframework.ide.eclipse.buildship30 [516]
+  Unresolved requirement: Require-Bundle: org.springframework.ide.eclipse.boot.wizard
+    -> Bundle-SymbolicName: org.springframework.ide.eclipse.boot.wizard; bundle-version="3.9.9.201906180643-RELEASE"; singleton:="true"
+       org.springframework.ide.eclipse.boot.wizard [514]
+         Unresolved requirement: Require-Bundle: org.springsource.ide.eclipse.commons.browser; bundle-version="[3.5.0,4.0.0)"; resolution:="optional"
+  Bundle was not resolved because of a uses constraint violation.
+  org.apache.felix.resolver.reason.ReasonException: Uses constraint violation. Unable to resolve resource org.springframework.ide.eclipse.boot.wizard [osgi.identity; type="osgi.bundle"; version:Version="3.9.9.201906180643-RELEASE"; osgi.identity="org.springframework.ide.eclipse.boot.wizard"; singleton:="true"] because it is exposed to package 'javax.xml.bind.annotation' from resources org.eclipse.osgi [osgi.identity; type="osgi.bundle"; version:Version="3.14.0.v20190517-1309"; osgi.identity="org.eclipse.osgi"; singleton:="true"] and javax.xml.bind [osgi.identity; type="osgi.bundle"; version:Version="2.2.0.v201105210648"; osgi.identity="javax.xml.bind"] via two dependency chains.
+
+Chain 1:
+  org.springframework.ide.eclipse.boot.wizard [osgi.identity; type="osgi.bundle"; version:Version="3.9.9.201906180643-RELEASE"; osgi.identity="org.springframework.ide.eclipse.boot.wizard"; singleton:="true"]
+    require: (osgi.wiring.bundle=org.eclipse.core.runtime)
+     |
+    provide: osgi.wiring.bundle: org.eclipse.core.runtime
+  org.eclipse.osgi [osgi.identity; type="osgi.bundle"; version:Version="3.14.0.v20190517-1309"; osgi.identity="org.eclipse.osgi"; singleton:="true"]
+
+Chain 2:
+  org.springframework.ide.eclipse.boot.wizard [osgi.identity; type="osgi.bundle"; version:Version="3.9.9.201906180643-RELEASE"; osgi.identity="org.springframework.ide.eclipse.boot.wizard"; singleton:="true"]
+    import: (&(osgi.wiring.package=javax.ws.rs)(version>=2.0.1))
+     |
+    export: osgi.wiring.package=javax.ws.rs; uses:=javax.xml.bind.annotation
+  javax.ws.rs [osgi.identity; type="osgi.bundle"; version:Version="2.0.1.v201504171603"; osgi.identity="javax.ws.rs"]
+    import: (&(osgi.wiring.package=javax.xml.bind.annotation)(&(version>=2.2.0)(!(version>=3.0.0))))
+     |
+    export: osgi.wiring.package: javax.xml.bind.annotation
+  javax.xml.bind [osgi.identity; type="osgi.bundle"; version:Version="2.2.0.v201105210648"; osgi.identity="javax.xml.bind"]
+	at org.eclipse.osgi.container.Module.start(Module.java:457)
+	at org.eclipse.osgi.container.ModuleContainer$ContainerStartLevel$1.run(ModuleContainer.java:1820)
+	at org.eclipse.osgi.internal.framework.EquinoxContainerAdaptor$2$1.execute(EquinoxContainerAdaptor.java:150)
+	at org.eclipse.osgi.container.ModuleContainer$ContainerStartLevel.incStartLevel(ModuleContainer.java:1813)
+	at org.eclipse.osgi.container.ModuleContainer$ContainerStartLevel.incStartLevel(ModuleContainer.java:1769)
+	at org.eclipse.osgi.container.ModuleContainer$ContainerStartLevel.doContainerStartLevel(ModuleContainer.java:1735)
+	at org.eclipse.osgi.container.ModuleContainer$ContainerStartLevel.dispatchEvent(ModuleContainer.java:1661)
+	at org.eclipse.osgi.container.ModuleContainer$ContainerStartLevel.dispatchEvent(ModuleContainer.java:1)
+	at org.eclipse.osgi.framework.eventmgr.EventManager.dispatchEvent(EventManager.java:234)
+	at org.eclipse.osgi.framework.eventmgr.EventManager$EventThread.run(EventManager.java:345)
+
+!ENTRY org.eclipse.egit.core 1 0 2019-07-09 14:47:03.970
+!MESSAGE Using Apache MINA sshd as ssh client.
+
+!ENTRY org.eclipse.jface 2 0 2019-07-09 14:47:07.010
+!MESSAGE Keybinding conflicts occurred.  They may interfere with normal accelerator operation.
+!SUBENTRY 1 org.eclipse.jface 2 0 2019-07-09 14:47:07.011
+!MESSAGE A conflict occurred for CTRL+SHIFT+T:
+Binding(CTRL+SHIFT+T,
+	ParameterizedCommand(Command(org.eclipse.jdt.ui.navigate.open.type,Open Type,
+		Open a type in a Java editor,
+		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
+		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@3dc55719,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+Binding(CTRL+SHIFT+T,
+	ParameterizedCommand(Command(org.eclipse.lsp4e.symbolinworkspace,Go to Symbol in Workspace,
+		,
+		Category(org.eclipse.lsp4e.category,Language Servers,null,true),
+		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@64665781,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+
+!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2019-07-09 14:47:20.788
+!MESSAGE Entering DelegatingStreamConnectionProvider()
+
+!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2019-07-09 14:47:20.789
+!MESSAGE DelegatingStreamConnectionProvider classloader = org.eclipse.osgi.internal.loader.EquinoxClassLoader@2f0b5d79[org.springframework.tooling.boot.ls:1.8.0.201906200642(id=520)]
+
+!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2019-07-09 14:47:20.792
+!MESSAGE SpringBootLanguageServer exists!
+
+!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2019-07-09 14:47:20.871
+!MESSAGE Instantiating ReusableClasspathListenerHandler
+
+!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2019-07-09 14:47:27.480
+!MESSAGE Boot LS startup time from start to initialized: 6665ms
+
+!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2019-07-09 14:47:27.640
+!MESSAGE ClasspathListenerHandler addClasspathListener sts4.classpath.LNutDEeHisBatched = true
+
+!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2019-07-09 14:47:27.644
+!MESSAGE subscribing to classpath changes: sts4.classpath.LNutDEeH isBatched = true
+
+!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2019-07-09 14:47:27.646
+!MESSAGE Setting up ClasspathListenerManager
+
+!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2019-07-09 14:47:27.656
+!MESSAGE subsribers = {sts4.classpath.LNutDEeH=Send Classpath Notifications(67)}
+
+!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2019-07-09 14:47:27.657
+!MESSAGE Sending initial event for all projects ...
+
+!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2019-07-09 14:47:34.877
+!MESSAGE project challenge ...
+
+!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2019-07-09 14:47:34.878
+!MESSAGE Sending initial event for all projects DONE
+
+!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2019-07-09 14:47:34.879
+!MESSAGE Preparing classpath changed notification challenge
+
+!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2019-07-09 14:47:34.879
+!MESSAGE ClasspathListenerHandler addClasspathListener sts4.classpath.LNutDEeH => OK
+
+!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2019-07-09 14:47:34.880
+!MESSAGE exists = true open = true => deleted = false
+
+!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2019-07-09 14:47:34.905
+!MESSAGE classpath=120 entries
+
+!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2019-07-09 14:47:34.905
+!MESSAGE buffering callback sts4.classpath.LNutDEeH challenge false 120
+
+!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2019-07-09 14:47:34.907
+!MESSAGE executing callback sts4.classpath.LNutDEeH 1 batched events
+
+!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2019-07-09 14:47:35.177
+!MESSAGE executing callback sts4.classpath.LNutDEeH SUCCESS [done]

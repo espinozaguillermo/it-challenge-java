@@ -37,4 +37,7 @@
 <fullyQualifiedTypeName name="java.util.Optional"/>
 <fullyQualifiedTypeName name="java.text.SimpleDateFormat"/>
 <fullyQualifiedTypeName name="java.util.ArrayList"/>
+<fullyQualifiedTypeName name="io.swagger.annotations.Api"/>
+<fullyQualifiedTypeName name="io.swagger.annotations.ApiOperation"/>
+<fullyQualifiedTypeName name="io.swagger.annotations.ApiParam"/>
 </qualifiedTypeNameHistroy>

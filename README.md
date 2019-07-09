@@ -116,6 +116,15 @@ Para editar hay que cambiar el tipo de request por PUT con los mismos campos en 
 }
 ```
 
+## Posibles mejoras
+
+Algunas mejoras que se pueden hacer 
+
+- Tests
+- Paginación
+- Filtros
+- Formularios
+
 --
 
 Links:

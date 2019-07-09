@@ -133,4 +133,5 @@ Links:
 - [JDBC](https://jdbc.postgresql.org/download.html)
 - [Eclipse](https://websiteforstudents.com/how-to-install-eclipse-oxygen-ide-on-ubuntu-167-04-17-10-18-04/)
 - [Tomcat](https://www.digitalocean.com/community/tutorials/how-to-install-apache-tomcat-8-on-ubuntu-16-04)
+- [Swagger UI](https://swagger.io/tools/swagger-ui/)
 - [POSTMAN](https://www.getpostman.com/)

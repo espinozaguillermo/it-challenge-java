@@ -51,6 +51,8 @@ IMPORTANTE: Es necesario cargar en una DB PostgreSQL el script [db-actualizada.s
 ![Run Config](it-java-challenge/runconfig.png?raw=true "Run Config")
 3. Una vez levantada la aplicación abrir en un navegador web el enlace http://localhost:8080/swagger-ui.html para abrir la interfaz de swagger para probar la aplicación. 
    Nota: la API de la aplicación también se puede probar con una herramienta tipo POSTMAN
+4. Para agregar una entidad elegir la acción tipo POST según el controller, presionar "Try it out", ingresar los parámetros requeridos y después "Execute"
+5. Para editar una entidad elegir la acción tipo GET, filtrando por id, según el controller, presionar "Try it out", ingresar los parámetros requeridos y después "Execute". Lo ideal es copiar el body que retorna el GET y copiarlo en el body del PUT
 
 ## Funciones y Reportes
 

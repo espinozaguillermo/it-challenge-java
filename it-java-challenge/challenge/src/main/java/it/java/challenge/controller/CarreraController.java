@@ -7,6 +7,8 @@ import java.util.Map;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.Api;
@@ -34,13 +37,23 @@ public class CarreraController {
 
 	@GetMapping("/carreras")
 	@ApiOperation(value = "Listado de carreras", response = List.class)
-	public List<Carrera> getAllCarreras() {
-		return carreraRepository.findAll();
+	public List<Carrera> getAllCarreras(
+			@ApiParam(value = "Página de resultados. Por defecto se retorna la primer página", required = false) @RequestParam(value = "page", required = false) Integer page) {
+		// Se retornan páginas de 20 resultados
+		Integer size = 20;
+		if (page == null) {
+			page = 0;
+		} else {
+			page--;
+		}
+		Pageable pageable = PageRequest.of(page, size);
+		return carreraRepository.findAll(pageable).getContent();
 	}
 
 	@GetMapping("/carreras/{id}")
 	@ApiOperation(value = "Retorna una carrera por id")
-	public ResponseEntity<Carrera> getCarreraById(@ApiParam(value = "Carrera id", required = true) @PathVariable(value = "id") Integer carreraId)
+	public ResponseEntity<Carrera> getCarreraById(
+			@ApiParam(value = "Carrera id", required = true) @PathVariable(value = "id") Integer carreraId)
 			throws ResourceNotFoundException {
 		Carrera carrera = carreraRepository.findById(carreraId)
 				.orElseThrow(() -> new ResourceNotFoundException("Carrera no encontrada id :: " + carreraId));
@@ -49,7 +62,8 @@ public class CarreraController {
 
 	@PostMapping("/carreras")
 	@ApiOperation(value = "Agrega una carrera")
-	public Carrera createCarrera(@ApiParam(value = "Object Carrera", required = true) @Valid @RequestBody Carrera carrera) {
+	public Carrera createCarrera(
+			@ApiParam(value = "Object Carrera", required = true) @Valid @RequestBody Carrera carrera) {
 		return carreraRepository.save(carrera);
 	}
 
@@ -57,7 +71,8 @@ public class CarreraController {
 	@ApiOperation(value = "Actualiza una carrera")
 	public ResponseEntity<Carrera> updateCarrera(
 			@ApiParam(value = "Carrera id a actualizar", required = true) @PathVariable(value = "id") Integer carreraId,
-			@ApiParam(value = "Object Carrera", required = true) @Valid @RequestBody Carrera carreraDetails) throws ResourceNotFoundException {
+			@ApiParam(value = "Object Carrera", required = true) @Valid @RequestBody Carrera carreraDetails)
+			throws ResourceNotFoundException {
 		Carrera carrera = carreraRepository.findById(carreraId)
 				.orElseThrow(() -> new ResourceNotFoundException("Carrera no encontrada id :: " + carreraId));
 
@@ -71,7 +86,8 @@ public class CarreraController {
 
 	@DeleteMapping("/carreras/{id}")
 	@ApiOperation(value = "Elimina una carrera por id")
-	public Map<String, Boolean> deleteCarrera(@ApiParam(value = "Carrera id a eliminar", required = true) @PathVariable(value = "id") Integer carreraId)
+	public Map<String, Boolean> deleteCarrera(
+			@ApiParam(value = "Carrera id a eliminar", required = true) @PathVariable(value = "id") Integer carreraId)
 			throws ResourceNotFoundException {
 		Carrera carrera = carreraRepository.findById(carreraId)
 				.orElseThrow(() -> new ResourceNotFoundException("Carrera no encontrada id :: " + carreraId));

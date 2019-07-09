@@ -1,5 +1,9 @@
 package it.java.challenge.controller;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.Api;
@@ -26,63 +31,73 @@ import it.java.challenge.exception.ResourceNotFoundException;
 
 @RestController
 @RequestMapping("/api/v1")
-@Api(value="CRUD Persona")
+@Api(value = "CRUD Persona")
 public class PersonaController {
-	
+
 	@Autowired
-    private PersonaRepository personaRepository;
-	
+	private PersonaRepository personaRepository;
+
 	@GetMapping("/personas")
 	@ApiOperation(value = "Listado de personas", response = List.class)
-    public List<Persona> getAllPersonas() {
-        return personaRepository.findAll();
-    }
-	
+	public List<Persona> getAllPersonas(@ApiParam(value = "Página de resultados. Por defecto se retorna la primer página", required = false) @RequestParam(value = "page", required = false) Integer page) {
+		// Se retornan páginas de 20 resultados
+		Integer size = 20;
+		if (page == null) {
+			page = 0;
+		} else {
+			page--;
+		}
+		Pageable pageable = PageRequest.of(page, size);
+		return personaRepository.findAll(pageable).getContent();
+	}
+
 	@GetMapping("/personas/{id}")
 	@ApiOperation(value = "Retorna una persona por id")
-    public ResponseEntity<Persona> getPersonaById(
-    		@ApiParam(value = "Persona id", required = true) @PathVariable(value = "id") Integer personaId)
-        throws ResourceNotFoundException {
-        Persona persona= personaRepository.findById(personaId)
-          .orElseThrow(() -> new ResourceNotFoundException("Persona no encontrada id :: " + personaId));
-        return ResponseEntity.ok().body(persona);
-    }
-	
+	public ResponseEntity<Persona> getPersonaById(
+			@ApiParam(value = "Persona id", required = true) @PathVariable(value = "id") Integer personaId)
+			throws ResourceNotFoundException {
+		Persona persona = personaRepository.findById(personaId)
+				.orElseThrow(() -> new ResourceNotFoundException("Persona no encontrada id :: " + personaId));
+		return ResponseEntity.ok().body(persona);
+	}
+
 	@PostMapping("/personas")
 	@ApiOperation(value = "Agrega una persona")
-    public Persona createPersona(@ApiParam(value = "Object Persona", required = true) @Valid @RequestBody Persona persona) {
-        return personaRepository.save(persona);
-    }
-	
+	public Persona createPersona(
+			@ApiParam(value = "Object Persona", required = true) @Valid @RequestBody Persona persona) {
+		return personaRepository.save(persona);
+	}
+
 	@PutMapping("/personas/{id}")
 	@ApiOperation(value = "Actualiza una persona")
-    public ResponseEntity<Persona> updatePersona(
-    		@ApiParam(value = "Persona id a actualizar", required = true) @PathVariable(value = "id") Integer personaId,
-    		@ApiParam(value = "Object Persona", required = true) @Valid @RequestBody Persona personaDetails) throws ResourceNotFoundException {
-        Persona persona = personaRepository.findById(personaId)
-        .orElseThrow(() -> new ResourceNotFoundException("Persona no encontrada id :: " + personaId));
+	public ResponseEntity<Persona> updatePersona(
+			@ApiParam(value = "Persona id a actualizar", required = true) @PathVariable(value = "id") Integer personaId,
+			@ApiParam(value = "Object Persona", required = true) @Valid @RequestBody Persona personaDetails)
+			throws ResourceNotFoundException {
+		Persona persona = personaRepository.findById(personaId)
+				.orElseThrow(() -> new ResourceNotFoundException("Persona no encontrada id :: " + personaId));
 
-        persona.setNombre(personaDetails.getNombre());
-        persona.setApellido(personaDetails.getApellido());
-        persona.setFechaNacimiento(personaDetails.getFechaNacimiento());
-        persona.setTipoDocumento(personaDetails.getTipoDocumento());
-        persona.setNroDocumento(personaDetails.getNroDocumento());
-        final Persona updatedPersona = personaRepository.save(persona);
-        return ResponseEntity.ok(updatedPersona);
-    }
-	
+		persona.setNombre(personaDetails.getNombre());
+		persona.setApellido(personaDetails.getApellido());
+		persona.setFechaNacimiento(personaDetails.getFechaNacimiento());
+		persona.setTipoDocumento(personaDetails.getTipoDocumento());
+		persona.setNroDocumento(personaDetails.getNroDocumento());
+		final Persona updatedPersona = personaRepository.save(persona);
+		return ResponseEntity.ok(updatedPersona);
+	}
+
 	@DeleteMapping("/personas/{id}")
 	@ApiOperation(value = "Elimina una persona por id")
-    public Map<String, Boolean> deletePersona(
+	public Map<String, Boolean> deletePersona(
 			@ApiParam(value = "Persona id a eliminar", required = true) @PathVariable(value = "id") Integer personaId)
-         throws ResourceNotFoundException {
-        Persona persona = personaRepository.findById(personaId)
-       .orElseThrow(() -> new ResourceNotFoundException("Persona no encontrada id :: " + personaId));
+			throws ResourceNotFoundException {
+		Persona persona = personaRepository.findById(personaId)
+				.orElseThrow(() -> new ResourceNotFoundException("Persona no encontrada id :: " + personaId));
 
-        personaRepository.delete(persona);
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("eliminado", Boolean.TRUE);
-        return response;
-    }
+		personaRepository.delete(persona);
+		Map<String, Boolean> response = new HashMap<>();
+		response.put("eliminado", Boolean.TRUE);
+		return response;
+	}
 
 }

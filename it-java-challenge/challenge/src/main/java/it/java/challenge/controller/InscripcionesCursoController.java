@@ -10,6 +10,8 @@ import java.util.Optional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.Api;
@@ -49,8 +52,17 @@ public class InscripcionesCursoController {
 
 	@GetMapping("/inscripcionescursos")
 	@ApiOperation(value = "Listado de inscripciones a curso", response = List.class)
-	public List<InscripcionesCurso> getAllInscripcionesCursos() {
-		return inscripcionescursoRepository.findAll();
+	public List<InscripcionesCurso> getAllInscripcionesCursos(
+			@ApiParam(value = "Página de resultados. Por defecto se retorna la primer página", required = false) @RequestParam(value = "page", required = false) Integer page) {
+		// Se retornan páginas de 20 resultados
+		Integer size = 20;
+		if (page == null) {
+			page = 0;
+		} else {
+			page--;
+		}
+		Pageable pageable = PageRequest.of(page, size);
+		return inscripcionescursoRepository.findAll(pageable).getContent();
 	}
 
 	@GetMapping("/inscripcionescursos/{id}")
@@ -104,16 +116,11 @@ public class InscripcionesCursoController {
 	@GetMapping("/inscripcionescursosactuales/{id}")
 	@ApiOperation(value = "Retorna las inscripciones a curso actuales por alumno id")
 	public List<InscripcionesCurso> getAllInscripcionesCursosActualesByAlumno(
-			@ApiParam(value = "Alumno id a detallar", required = true) @PathVariable(value = "id") Integer alumnoId) {
-		if (alumnoId != null) {
-			Optional<Alumno> optalumno = alumnoRepository.findById(alumnoId);
-			if (optalumno.isPresent()) {
-				Alumno alumno = optalumno.get();
-
-				return inscripcionescursoRepository.findByAlumnoAndCalificacion(alumno, null);
-			}
-		}
-		return inscripcionescursoRepository.findAll();
+			@ApiParam(value = "Alumno id a detallar", required = true) @PathVariable(value = "id") Integer alumnoId)
+			throws ResourceNotFoundException {
+		Alumno alumno = alumnoRepository.findById(alumnoId)
+				.orElseThrow(() -> new ResourceNotFoundException("Alumno no encontrado id :: " + alumnoId));
+		return inscripcionescursoRepository.findByAlumnoAndCalificacion(alumno, null);
 	}
 
 	@GetMapping("/promediogeneral/{id}")
@@ -151,8 +158,6 @@ public class InscripcionesCursoController {
 				}
 				list.add(tmplist);
 			}
-		} else {
-			list.addAll(inscripcionescursoRepository.findAll());
 		}
 		return list;
 	}
@@ -188,8 +193,6 @@ public class InscripcionesCursoController {
 					list.add(tmplist);
 				}
 			}
-		} else {
-			list.addAll(inscripcionescursoRepository.findAll());
 		}
 		return list;
 	}

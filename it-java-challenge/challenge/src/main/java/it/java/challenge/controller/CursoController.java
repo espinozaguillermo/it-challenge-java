@@ -9,6 +9,8 @@ import java.util.Map;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.Api;
@@ -39,8 +42,17 @@ public class CursoController {
 
 	@GetMapping("/cursos")
 	@ApiOperation(value = "Listado de cursos", response = List.class)
-	public List<Curso> getAllCursos() {
-		return cursoRepository.findAll();
+	public List<Curso> getAllCursos(
+			@ApiParam(value = "Página de resultados. Por defecto se retorna la primer página", required = false) @RequestParam(value = "page", required = false) Integer page) {
+		// Se retornan páginas de 20 resultados
+		Integer size = 20;
+		if (page == null) {
+			page = 0;
+		} else {
+			page--;
+		}
+		Pageable pageable = PageRequest.of(page, size);
+		return cursoRepository.findAll(pageable).getContent();
 	}
 
 	@GetMapping("/cursos/{id}")
@@ -95,7 +107,8 @@ public class CursoController {
 
 	@GetMapping("/cursos/{id}/inscripciones")
 	@ApiOperation(value = "Retorna para una asignatura(curso) dado, los alumnos inscriptos y el docente correspondiente")
-	public List<Object> getInscripcionesCursoById(@ApiParam(value = "Curso id a detallar", required = true) @PathVariable(value = "id") Integer cursoId)
+	public List<Object> getInscripcionesCursoById(
+			@ApiParam(value = "Curso id a detallar", required = true) @PathVariable(value = "id") Integer cursoId)
 			throws ResourceNotFoundException {
 		Curso curso = cursoRepository.findById(cursoId)
 				.orElseThrow(() -> new ResourceNotFoundException("Curso no encontrado id :: " + cursoId));

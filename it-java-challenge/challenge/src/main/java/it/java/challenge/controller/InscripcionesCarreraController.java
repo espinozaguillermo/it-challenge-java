@@ -8,6 +8,8 @@ import java.util.Optional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,7 +42,8 @@ public class InscripcionesCarreraController {
 	@GetMapping("/inscripcionescarreras")
 	@ApiOperation(value = "Listado de inscripciones a carrera. Si se pasa un id de alumno retorna inscripciones actuales a carreras", response = List.class)
 	public List<InscripcionesCarrera> getAllInscripcionesCarreras(
-			@ApiParam(value = "Alumno id", required = false) @PathVariable(value = "id") @RequestParam Integer alumnoId) {
+			@ApiParam(value = "Alumno id", required = false) @RequestParam(value = "id", required = false) Integer alumnoId,
+			@ApiParam(value = "Página de resultados. Por defecto se retorna la primer página", required = false) @RequestParam(value = "page", required = false) Integer page) {
 		if (alumnoId != null) {
 			Optional<Alumno> optalumno = alumnoRepository.findById(alumnoId);
 			if (optalumno.isPresent()) {
@@ -49,7 +52,15 @@ public class InscripcionesCarreraController {
 				return inscripcionescarreraRepository.findByAlumno(alumno);
 			}
 		}
-		return inscripcionescarreraRepository.findAll();
+		// Se retornan páginas de 20 resultados
+		Integer size = 20;
+		if (page == null) {
+			page = 0;
+		} else {
+			page--;
+		}
+		Pageable pageable = PageRequest.of(page, size);
+		return inscripcionescarreraRepository.findAll(pageable).getContent();
 	}
 
 	@GetMapping("/inscripcionescarreras/{id}")

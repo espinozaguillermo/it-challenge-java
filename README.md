@@ -54,7 +54,7 @@ IMPORTANTE: Es necesario cargar en una DB PostgreSQL el script [db-actualizada.s
 
 ## Funciones y Reportes
 
-Registre y edite alumnos en el modelo de base de datos anterior
+- Registre y edite alumnos en el modelo de base de datos anterior
 
 
 **/api/v1/personas (POST)**
@@ -82,30 +82,25 @@ Registre y edite alumnos en el modelo de base de datos anterior
 ```
 Para editar hay que cambiar el tipo de request por PUT con los mismos campos en el body
 
-Provea los siguientes reportes:
-Inscripciones actuales a carreras y cursos
-
+- Provea los siguientes reportes:
+. Inscripciones actuales a carreras y cursos
 
 **/api/v1/inscripcionescarreras?id={id} (GET)** id = alumno id (opcional)
 **/api/v1/inscripcionescursosactuales/{id} (GET)** id = alumno id
 
-Estado de cursos anteriores
-
+. Estado de cursos anteriores
 
 **/api/v1/estadoinscripcionescursos/{id} (GET)** id = alumno id
 
-Promedio general por carrera tomando los cursos ya aprobados
-
+. Promedio general por carrera tomando los cursos ya aprobados
 
 **/api/v1/promediogeneral/{id} (GET)** id = alumno id
 
-Para una asignatura(curso) dado, los alumnos inscriptos y el docente correspondiente.
-
+. Para una asignatura(curso) dado, los alumnos inscriptos y el docente correspondiente.
 
 **/api/v1/cursos/{id}/inscripciones (GET)** id = curso id
 
-Permita a un alumno inscribirse a una materia.
-
+- Permita a un alumno inscribirse a una materia.
 
 **/api/v1/inscripcionescursos (POST)**
 ```json

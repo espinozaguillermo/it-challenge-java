@@ -44,7 +44,7 @@ Los ejercicios consisten en:
 
 ## Como probar la aplicación
 
-! IMPORTANTE: Es necesario cargar en una DB PostgreSQL el script [db-actualizada.sql](db-actualizada.sql) con las actualizaciones del modelo original. Además PostgreSQL tiene que estar corriendo en *jdbc:postgresql://localhost:5432/postgres*
+IMPORTANTE: Es necesario cargar en una DB PostgreSQL el script [db-actualizada.sql](db-actualizada.sql) con las actualizaciones del modelo original. Además PostgreSQL tiene que estar corriendo en *jdbc:postgresql://localhost:5432/postgres*
 
 1. En el IDE Eclipse, cargar el workspace [it-java-challenge](it-java-challenge)
 2. Correr la aplicación con Run As.. y seleccionar Application, o correrla como una Spring boot application seleccionando el Project challenge y como Main Type it.java.challenge.ItJavaChallengeApplication
@@ -54,24 +54,72 @@ Los ejercicios consisten en:
 
 ## Funciones y Reportes
 
-a. Registre y edite alumnos en el modelo de base de datos anterior.
-/api/v1/personas (POST)
+Registre y edite alumnos en el modelo de base de datos anterior
+
+
+**/api/v1/personas (POST)**
+```json
 {
-  "apellido": "string",
-  "fechaNacimiento": "yyyy-MM-dd",
-  "id": 0,
-  "nombre": "string",
-  "nroDocumento": 0,
-  "tipoDocumento": "string"
+    "apellido": "string",
+    "fechaNacimiento": "yyyy-MM-dd",
+    "id": 0,
+    "nombre": "string",
+    "nroDocumento": 0,
+    "tipoDocumento": "string"
 }
-c. Permita a un alumno inscribirse a una materia.
+```
 
-b. Provea los siguientes reportes:
-- inscripciones actuales a carreras y cursos
-- estado de cursos anteriores
-- promedio general por carrera tomando los cursos ya aprobados
-- Para una asignatura(curso) dado, los alumnos inscriptos y el docente correspondiente.
 
+**/api/v1/alumnos (POST)** es necesario que la persona exista
+```json
+{
+    "id": 0,
+    "legajo": 0,
+    "persona": {
+       "id": 0
+    }
+}
+```
+Para editar hay que cambiar el tipo de request por PUT con los mismos campos en el body
+
+Provea los siguientes reportes:
+Inscripciones actuales a carreras y cursos
+
+
+**/api/v1/inscripcionescarreras?id={id} (GET)** id = alumno id (opcional)
+**/api/v1/inscripcionescursosactuales/{id} (GET)** id = alumno id
+
+Estado de cursos anteriores
+
+
+**/api/v1/estadoinscripcionescursos/{id} (GET)** id = alumno id
+
+Promedio general por carrera tomando los cursos ya aprobados
+
+
+**/api/v1/promediogeneral/{id} (GET)** id = alumno id
+
+Para una asignatura(curso) dado, los alumnos inscriptos y el docente correspondiente.
+
+
+**/api/v1/cursos/{id}/inscripciones (GET)** id = curso id
+
+Permita a un alumno inscribirse a una materia.
+
+
+**/api/v1/inscripcionescursos (POST)**
+```json
+{
+  "alumno": {
+    "id": 0
+  },
+  "calificacion": 0,
+  "curso": {
+    "id": 0
+  },
+  "fechainscripcion": "yyyy-MM-dd"
+}
+```
 
 --
 

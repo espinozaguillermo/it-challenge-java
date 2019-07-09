@@ -19,61 +19,54 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import it.java.challenge.model.*;
 import it.java.challenge.repository.*;
 import it.java.challenge.exception.ResourceNotFoundException;
 
 @RestController
 @RequestMapping("/api/v1")
+@Api(value = "CRUD Curso")
 public class CursoController {
 
 	@Autowired
 	private CursoRepository cursoRepository;
-	
+
 	@Autowired
 	private InscripcionesCursoRepository inscripcionesCursoRepository;
 
 	@GetMapping("/cursos")
+	@ApiOperation(value = "Listado de cursos", response = List.class)
 	public List<Curso> getAllCursos() {
 		return cursoRepository.findAll();
 	}
 
-	@GetMapping("/cursos/{id}/inscripciones")
-	public List<Object> getInscripcionesCursoById(@PathVariable(value = "id") Integer cursoId)
-			throws ResourceNotFoundException {
-		Curso curso = cursoRepository.findById(cursoId)
-				.orElseThrow(() -> new ResourceNotFoundException("Curso no encontrada id :: " + cursoId));
-		List<Object> list = new ArrayList<Object>();
-		list.add(curso);
-		List<InscripcionesCurso> listinscripcionescurso = inscripcionesCursoRepository.findByCurso(curso);
-		for (InscripcionesCurso item : listinscripcionescurso) {
-			List<Object> tmplist = new ArrayList<Object>();
-			tmplist.add(item.getAlumno());
-			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-			tmplist.add(formatter.format(item.getFechainscripcion()));
-			list.add(tmplist);
-		}
-		return list;
-	}
-
 	@GetMapping("/cursos/{id}")
-	public ResponseEntity<Curso> getCursoById(@PathVariable(value = "id") Integer cursoId)
+	@ApiOperation(value = "Retorna un curso por id")
+	public ResponseEntity<Curso> getCursoById(
+			@ApiParam(value = "Curso id", required = true) @PathVariable(value = "id") Integer cursoId)
 			throws ResourceNotFoundException {
 		Curso curso = cursoRepository.findById(cursoId)
-				.orElseThrow(() -> new ResourceNotFoundException("Curso no encontrada id :: " + cursoId));
+				.orElseThrow(() -> new ResourceNotFoundException("Curso no encontrado id :: " + cursoId));
 		return ResponseEntity.ok().body(curso);
 	}
 
 	@PostMapping("/cursos")
-	public Curso createCurso(@Valid @RequestBody Curso curso) {
+	@ApiOperation(value = "Agrega un curso")
+	public Curso createCurso(@ApiParam(value = "Object Curso", required = true) @Valid @RequestBody Curso curso) {
 		return cursoRepository.save(curso);
 	}
 
 	@PutMapping("/cursos/{id}")
-	public ResponseEntity<Curso> updateCurso(@PathVariable(value = "id") Integer cursoId,
-			@Valid @RequestBody Curso cursoDetails) throws ResourceNotFoundException {
+	@ApiOperation(value = "Actualiza un curso")
+	public ResponseEntity<Curso> updateCurso(
+			@ApiParam(value = "Curso id a actualizar", required = true) @PathVariable(value = "id") Integer cursoId,
+			@ApiParam(value = "Object Curso", required = true) @Valid @RequestBody Curso cursoDetails)
+			throws ResourceNotFoundException {
 		Curso curso = cursoRepository.findById(cursoId)
-				.orElseThrow(() -> new ResourceNotFoundException("Curso no encontrada id :: " + cursoId));
+				.orElseThrow(() -> new ResourceNotFoundException("Curso no encontrado id :: " + cursoId));
 
 		curso.setDocente(cursoDetails.getDocente());
 		curso.setCarrera(cursoDetails.getCarrera());
@@ -87,15 +80,36 @@ public class CursoController {
 	}
 
 	@DeleteMapping("/cursos/{id}")
-	public Map<String, Boolean> deleteCurso(@PathVariable(value = "id") Integer cursoId)
+	@ApiOperation(value = "Elimina un curso por id")
+	public Map<String, Boolean> deleteCurso(
+			@ApiParam(value = "Curso id a eliminar", required = true) @PathVariable(value = "id") Integer cursoId)
 			throws ResourceNotFoundException {
 		Curso curso = cursoRepository.findById(cursoId)
-				.orElseThrow(() -> new ResourceNotFoundException("Curso no encontrada id :: " + cursoId));
+				.orElseThrow(() -> new ResourceNotFoundException("Curso no encontrado id :: " + cursoId));
 
 		cursoRepository.delete(curso);
 		Map<String, Boolean> response = new HashMap<>();
 		response.put("eliminado", Boolean.TRUE);
 		return response;
+	}
+
+	@GetMapping("/cursos/{id}/inscripciones")
+	@ApiOperation(value = "Retorna para una asignatura(curso) dado, los alumnos inscriptos y el docente correspondiente")
+	public List<Object> getInscripcionesCursoById(@ApiParam(value = "Curso id a detallar", required = true) @PathVariable(value = "id") Integer cursoId)
+			throws ResourceNotFoundException {
+		Curso curso = cursoRepository.findById(cursoId)
+				.orElseThrow(() -> new ResourceNotFoundException("Curso no encontrado id :: " + cursoId));
+		List<Object> list = new ArrayList<Object>();
+		list.add(curso);
+		List<InscripcionesCurso> listinscripcionescurso = inscripcionesCursoRepository.findByCurso(curso);
+		for (InscripcionesCurso item : listinscripcionescurso) {
+			List<Object> tmplist = new ArrayList<Object>();
+			tmplist.add(item.getAlumno());
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+			tmplist.add(formatter.format(item.getFechainscripcion()));
+			list.add(tmplist);
+		}
+		return list;
 	}
 
 }

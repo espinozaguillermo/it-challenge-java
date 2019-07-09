@@ -17,24 +17,31 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import it.java.challenge.model.Docente;
 import it.java.challenge.repository.DocenteRepository;
 import it.java.challenge.exception.ResourceNotFoundException;
 
 @RestController
 @RequestMapping("/api/v1")
+@Api(value = "CRUD Docente")
 public class DocenteController {
 
 	@Autowired
 	private DocenteRepository docenteRepository;
 
 	@GetMapping("/docentes")
+	@ApiOperation(value = "Listado de docentes", response = List.class)
 	public List<Docente> getAllDocentes() {
 		return docenteRepository.findAll();
 	}
 
 	@GetMapping("/docentes/{id}")
-	public ResponseEntity<Docente> getDocenteById(@PathVariable(value = "id") Integer docenteId)
+	@ApiOperation(value = "Retorna un docente por id")
+	public ResponseEntity<Docente> getDocenteById(
+			@ApiParam(value = "Docente id", required = true) @PathVariable(value = "id") Integer docenteId)
 			throws ResourceNotFoundException {
 		Docente docente = docenteRepository.findById(docenteId)
 				.orElseThrow(() -> new ResourceNotFoundException("Docente no encontrada id :: " + docenteId));
@@ -42,13 +49,18 @@ public class DocenteController {
 	}
 
 	@PostMapping("/docentes")
-	public Docente createDocente(@Valid @RequestBody Docente docente) {
+	@ApiOperation(value = "Agrega un docente")
+	public Docente createDocente(
+			@ApiParam(value = "Object Docente", required = true) @Valid @RequestBody Docente docente) {
 		return docenteRepository.save(docente);
 	}
 
 	@PutMapping("/docentes/{id}")
-	public ResponseEntity<Docente> updateDocente(@PathVariable(value = "id") Integer docenteId,
-			@Valid @RequestBody Docente docenteDetails) throws ResourceNotFoundException {
+	@ApiOperation(value = "Actualiza un docente")
+	public ResponseEntity<Docente> updateDocente(
+			@ApiParam(value = "Docente id a actualizar", required = true) @PathVariable(value = "id") Integer docenteId,
+			@ApiParam(value = "Object Docente", required = true) @Valid @RequestBody Docente docenteDetails)
+			throws ResourceNotFoundException {
 		Docente docente = docenteRepository.findById(docenteId)
 				.orElseThrow(() -> new ResourceNotFoundException("Docente no encontrada id :: " + docenteId));
 
@@ -59,7 +71,9 @@ public class DocenteController {
 	}
 
 	@DeleteMapping("/docentes/{id}")
-	public Map<String, Boolean> deleteDocente(@PathVariable(value = "id") Integer docenteId)
+	@ApiOperation(value = "Elimina un docente por id")
+	public Map<String, Boolean> deleteDocente(
+			@ApiParam(value = "Docente id a eliminar", required = true) @PathVariable(value = "id") Integer docenteId)
 			throws ResourceNotFoundException {
 		Docente docente = docenteRepository.findById(docenteId)
 				.orElseThrow(() -> new ResourceNotFoundException("Docente no encontrada id :: " + docenteId));

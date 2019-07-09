@@ -1,0 +1,5 @@
+package it.java.challenge.config;
+
+public class Swagger2Config {
+
+}

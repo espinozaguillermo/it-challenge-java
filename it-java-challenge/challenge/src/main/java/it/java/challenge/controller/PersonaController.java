@@ -17,24 +17,31 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import it.java.challenge.model.Persona;
 import it.java.challenge.repository.PersonaRepository;
 import it.java.challenge.exception.ResourceNotFoundException;
 
 @RestController
 @RequestMapping("/api/v1")
+@Api(value="CRUD Persona")
 public class PersonaController {
 	
 	@Autowired
     private PersonaRepository personaRepository;
 	
 	@GetMapping("/personas")
+	@ApiOperation(value = "Listado de personas", response = List.class)
     public List<Persona> getAllPersonas() {
         return personaRepository.findAll();
     }
 	
 	@GetMapping("/personas/{id}")
-    public ResponseEntity<Persona> getPersonaById(@PathVariable(value = "id") Integer personaId)
+	@ApiOperation(value = "Retorna una persona por id")
+    public ResponseEntity<Persona> getPersonaById(
+    		@ApiParam(value = "Persona id", required = true) @PathVariable(value = "id") Integer personaId)
         throws ResourceNotFoundException {
         Persona persona= personaRepository.findById(personaId)
           .orElseThrow(() -> new ResourceNotFoundException("Persona no encontrada id :: " + personaId));
@@ -42,13 +49,16 @@ public class PersonaController {
     }
 	
 	@PostMapping("/personas")
-    public Persona createPersona(@Valid @RequestBody Persona persona) {
+	@ApiOperation(value = "Agrega una persona")
+    public Persona createPersona(@ApiParam(value = "Object Persona", required = true) @Valid @RequestBody Persona persona) {
         return personaRepository.save(persona);
     }
 	
 	@PutMapping("/personas/{id}")
-    public ResponseEntity<Persona> updatePersona(@PathVariable(value = "id") Integer personaId,
-         @Valid @RequestBody Persona personaDetails) throws ResourceNotFoundException {
+	@ApiOperation(value = "Actualiza una persona")
+    public ResponseEntity<Persona> updatePersona(
+    		@ApiParam(value = "Persona id a actualizar", required = true) @PathVariable(value = "id") Integer personaId,
+    		@ApiParam(value = "Object Persona", required = true) @Valid @RequestBody Persona personaDetails) throws ResourceNotFoundException {
         Persona persona = personaRepository.findById(personaId)
         .orElseThrow(() -> new ResourceNotFoundException("Persona no encontrada id :: " + personaId));
 
@@ -62,7 +72,9 @@ public class PersonaController {
     }
 	
 	@DeleteMapping("/personas/{id}")
-    public Map<String, Boolean> deletePersona(@PathVariable(value = "id") Integer personaId)
+	@ApiOperation(value = "Elimina una persona por id")
+    public Map<String, Boolean> deletePersona(
+			@ApiParam(value = "Persona id a eliminar", required = true) @PathVariable(value = "id") Integer personaId)
          throws ResourceNotFoundException {
         Persona persona = personaRepository.findById(personaId)
        .orElseThrow(() -> new ResourceNotFoundException("Persona no encontrada id :: " + personaId));

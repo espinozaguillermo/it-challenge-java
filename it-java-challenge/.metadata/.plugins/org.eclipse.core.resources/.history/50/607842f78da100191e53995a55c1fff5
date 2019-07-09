@@ -1,0 +1,63 @@
+package it.java.challenge.validator;
+
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+
+import javax.validation.ConstraintValidator;
+import javax.validation.ConstraintValidatorContext;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import it.java.challenge.model.InscripcionesCarrera;
+import it.java.challenge.repository.InscripcionesCarreraRepository;
+import it.java.challenge.model.Carrera;
+
+/**
+ * Valida el alumno no tenga una inscripcion a carrera ya abierta 
+ */
+public class UniqueInscripcionCarreraValidator implements ConstraintValidator<UniqueInscripcionCarrera, InscripcionesCarrera> {
+
+	@Autowired
+	private InscripcionesCarreraRepository inscripcionesCarreraRepository;
+	
+	@Override
+	public void initialize(UniqueInscripcionCarrera constraintAnnotation) {
+	}
+
+	@Override
+	public boolean isValid(InscripcionesCarrera inscripcioncarrera, ConstraintValidatorContext context) {
+		if (inscripcioncarrera == null) {
+			return true;
+		}
+		List<InscripcionesCarrera> listinscripcioncarrera = inscripcionesCarreraRepository.findByCarreraAndAlumno(inscripcioncarrera.getCarrera().getId(), inscripcioncarrera.getAlumno().getId());
+		System.out.println(listinscripcioncarrera.size());
+		return false;
+//		try {
+//			Optional<InscripcionesCarrera> optinscripcioncarrera = inscripcionesCarreraRepository..findById(inscripcioncarrera.getCarrera().getId());
+//			Date fechainscripcion = inscripcioncarrera.getFechainscripcion();
+//			Carrera carrera;
+//			List<InscripcionesCarrera> listinscripcioncarrera = inscripcionesCarreraRepository.findByCarreraAndAlumno(inscripcioncarrera.getCarrera().getId(), inscripcioncarrera.getAlumno().getId());
+//			System.out.println(listinscripcioncarrera.size());
+//			if (optcarrera.isPresent()) {
+//				carrera = optcarrera.get();
+//				if (carrera != null) {
+//					Date fechadesde = carrera.getFechadesde();
+//					Date fechahasta = null;
+//					if (carrera.getFechahasta() != null) {
+//						fechahasta = carrera.getFechahasta();	
+//					}
+//					if (fechadesde != null && fechahasta != null) {
+//						return fechainscripcion.compareTo(fechadesde) >= 0 && fechainscripcion.compareTo(fechahasta) <= 0;
+//					} else {
+//						return fechadesde != null && fechahasta == null && fechainscripcion.compareTo(fechadesde) >= 0;
+//					}
+//				}
+//			}
+//			return false;
+//		} catch (final Exception ignore) {
+//		}
+//		return true;
+	}
+
+}

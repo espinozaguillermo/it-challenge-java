@@ -1,0 +1,168 @@
+package it.java.challenge.controller;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
+import javax.validation.Valid;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import it.java.challenge.model.*;
+import it.java.challenge.repository.*;
+import it.java.challenge.exception.ResourceNotFoundException;
+
+@RestController
+@RequestMapping("/api/v1")
+public class InscripcionesCursoController {
+
+	@Autowired
+	private InscripcionesCursoRepository inscripcionescursoRepository;
+
+	@Autowired
+	private InscripcionesCarreraRepository inscripcionescarreraRepository;
+
+	@Autowired
+	private AlumnoRepository alumnoRepository;
+
+	@Autowired
+	private CarreraRepository carreraRepository;
+
+	@Autowired
+	private CursoRepository cursoRepository;
+
+	@GetMapping("/inscripcionescursos")
+	public List<InscripcionesCurso> getAllInscripcionesCursos() {
+		return inscripcionescursoRepository.findAll();
+	}
+
+	@GetMapping("/inscripcionescursosactuales/{id}")
+	public List<InscripcionesCurso> getAllInscripcionesCursosActualesByAlumno(
+			@PathVariable(value = "id") Integer alumnoId) {
+		if (alumnoId != null) {
+			Optional<Alumno> optalumno = alumnoRepository.findById(alumnoId);
+			if (optalumno.isPresent()) {
+				Alumno alumno = optalumno.get();
+
+				return inscripcionescursoRepository.findByAlumnoAndCalificacion(alumno, null);
+			}
+		}
+		return inscripcionescursoRepository.findAll();
+	}
+
+	@GetMapping("/estadoinscripcionescursos/{id}")
+	public List<Object> getEstadoInscripcionesCursosByAlumno(@PathVariable(value = "id") Integer alumnoId) {
+		List<Object> list = new ArrayList<Object>();
+		if (alumnoId != null) {
+			Optional<Alumno> optalumno = alumnoRepository.findById(alumnoId);
+			if (optalumno.isPresent()) {
+				Alumno alumno = optalumno.get();
+				list.add(alumno);
+				List<InscripcionesCurso> listinscripcionescurso = inscripcionescursoRepository.findByAlumno(alumno);
+				for (InscripcionesCurso item : listinscripcionescurso) {
+					if (item.getCalificacion() != null) {
+						List<Object> tmplist = new ArrayList<Object>();
+						tmplist.add(item.getCurso().getNombre());
+						tmplist.add(item.getFechainscripcion());
+						tmplist.add(item.getCalificacion());
+						if (item.getCalificacion() >= item.getCurso().getCalificacionaprobada()) {
+							tmplist.add("APROBADO");
+						} else {
+							tmplist.add("NO APROBADO");
+						}
+						list.add(tmplist);
+					}
+				}
+			}
+		} else {
+			list.addAll(inscripcionescursoRepository.findAll());
+		}
+		return list;
+	}
+
+	@GetMapping("/promediogeneral/{id}")
+	public List<Object> getPromedioGralInscripcionesCursosByAlumno(@PathVariable(value = "id") Integer alumnoId) throws ResourceNotFoundException {
+		List<Object> list = new ArrayList<Object>();
+		if (alumnoId != null) {
+			Alumno alumno = alumnoRepository.findById(alumnoId)
+					.orElseThrow(() -> new ResourceNotFoundException("Alumno no encontrado id :: " + alumnoId));
+			List<InscripcionesCarrera> listinscripcionescarrera = inscripcionescarreraRepository.findByAlumno(alumno);
+			for (InscripcionesCarrera item : listinscripcionescarrera) {
+				List<Curso> listcurso = cursoRepository.findByCarrera(item.getCarrera());
+				Carrera carrera = carreraRepository.findById(item.getCarrera())
+						.orElseThrow(() -> new ResourceNotFoundException("Carrera no encontrado id :: " + item.getCarrera()));
+				list.add(item.getCarrera().getNombre());
+				Integer tmpSum = 0;
+				Integer tmpCursosAprobados = 0;
+				for (Curso curso : listcurso) {
+					List<InscripcionesCurso> listinscripcionescurso = inscripcionescursoRepository
+							.findByCursoAndAlumno(curso, alumno);
+					for (InscripcionesCurso inscripcioncurso : listinscripcionescurso) {
+						if (inscripcioncurso.getCalificacion() >= curso.getCalificacionaprobada()) {
+							tmpSum += inscripcioncurso.getCalificacion();
+							tmpCursosAprobados++;
+						}
+					}
+				}
+				if (tmpSum != 0 && tmpCursosAprobados != 0) {
+					list.add(tmpSum / tmpCursosAprobados);
+				}
+			}
+		} else {
+			list.addAll(inscripcionescursoRepository.findAll());
+		}
+		return list;
+	}
+
+	@GetMapping("/inscripcionescursos/{id}")
+	public ResponseEntity<InscripcionesCurso> getInscripcionesCursoById(
+			@PathVariable(value = "id") Integer inscripcionescursoId) throws ResourceNotFoundException {
+		InscripcionesCurso inscripcionescurso = inscripcionescursoRepository.findById(inscripcionescursoId).orElseThrow(
+				() -> new ResourceNotFoundException("InscripcionesCurso no encontrada id :: " + inscripcionescursoId));
+		return ResponseEntity.ok().body(inscripcionescurso);
+	}
+
+	@PostMapping("/inscripcionescursos")
+	public InscripcionesCurso createInscripcionesCurso(@Valid @RequestBody InscripcionesCurso inscripcionescurso) {
+		return inscripcionescursoRepository.save(inscripcionescurso);
+	}
+
+	@PutMapping("/inscripcionescursos/{id}")
+	public ResponseEntity<InscripcionesCurso> updateInscripcionesCurso(
+			@PathVariable(value = "id") Integer inscripcionescursoId,
+			@Valid @RequestBody InscripcionesCurso inscripcionescursoDetails) throws ResourceNotFoundException {
+		InscripcionesCurso inscripcionescurso = inscripcionescursoRepository.findById(inscripcionescursoId).orElseThrow(
+				() -> new ResourceNotFoundException("InscripcionesCurso no encontrada id :: " + inscripcionescursoId));
+
+		inscripcionescurso.setAlumno(inscripcionescursoDetails.getAlumno());
+		inscripcionescurso.setCurso(inscripcionescursoDetails.getCurso());
+		inscripcionescurso.setFechainscripcion(inscripcionescursoDetails.getFechainscripcion());
+		inscripcionescurso.setCalificacion(inscripcionescursoDetails.getCalificacion());
+		final InscripcionesCurso updatedInscripcionesCurso = inscripcionescursoRepository.save(inscripcionescurso);
+		return ResponseEntity.ok(updatedInscripcionesCurso);
+	}
+
+	@DeleteMapping("/inscripcionescursos/{id}")
+	public Map<String, Boolean> deleteInscripcionesCurso(@PathVariable(value = "id") Integer inscripcionescursoId)
+			throws ResourceNotFoundException {
+		InscripcionesCurso inscripcionescurso = inscripcionescursoRepository.findById(inscripcionescursoId).orElseThrow(
+				() -> new ResourceNotFoundException("InscripcionesCurso no encontrada id :: " + inscripcionescursoId));
+
+		inscripcionescursoRepository.delete(inscripcionescurso);
+		Map<String, Boolean> response = new HashMap<>();
+		response.put("eliminado", Boolean.TRUE);
+		return response;
+	}
+
+}

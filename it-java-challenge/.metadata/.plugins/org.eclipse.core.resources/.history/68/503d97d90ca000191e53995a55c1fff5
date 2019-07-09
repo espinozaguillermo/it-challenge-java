@@ -1,0 +1,83 @@
+package it.java.challenge.model;
+
+import java.util.Date;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+enum TipoDocumento {
+	DNI, LIBRETACIVICA;
+}
+
+@Entity
+@Table(name = "persona")
+public class Persona {
+	private Integer identificador;
+	private TipoDocumento tipoDocumento;
+	private Integer nroDocumento;
+	private String nombre;
+	private String apellido;
+	private Date fechaNacimiento;
+
+	public Persona(TipoDocumento newTipoDocumento, Integer newNroDocumento, String newNombre, String newApellido,
+			Date newFechaNacimiento) {
+		tipoDocumento = newTipoDocumento;
+		nroDocumento = newNroDocumento;
+		nombre = newNombre;
+		apellido = newApellido;
+		fechaNacimiento = newFechaNacimiento;
+	}
+	
+	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+        public long getIdentificador() {
+        return identificador;
+    }
+	public void setIdentificador(Integer newIdentificador) {
+		this.identificador = newIdentificador;
+	}
+	
+	@Column(name = "tipodoc", nullable = false)
+	public TipoDocumento getTipoDocumento() {
+		return tipoDocumento;
+	}
+	public void setTipoDocumento(TipoDocumento newTipoDocumento) {
+		this.tipoDocumento = newTipoDocumento;
+	}
+	
+	@Column(name = "documento", nullable = false)
+	public Integer getNroDocumento() {
+		return nroDocumento;
+	}
+	public void setNroDocumento(Integer newNroDocumento) {
+		this.nroDocumento = newNroDocumento;
+	}
+	
+	@Column(name = "nombre", nullable = false)
+	public String getNombre() {
+		return nombre;
+	}
+	public void setNombre(String newNombre) {
+		this.nombre = newNombre;
+	}
+	
+	@Column(name = "apellido", nullable = false)
+	public String getApellido() {
+		return apellido;
+	}
+	public void setApellido(String newApellido) {
+		this.apellido = newApellido;
+	}
+	
+	@Column(name = "fechanac", nullable = false)
+	public Date getFechaNacimiento() {
+		return fechaNacimiento;
+	}
+	public void setFechaNacimiento(Date newFechaNacimiento) {
+		this.fechaNacimiento = newFechaNacimiento;
+	}
+
+}

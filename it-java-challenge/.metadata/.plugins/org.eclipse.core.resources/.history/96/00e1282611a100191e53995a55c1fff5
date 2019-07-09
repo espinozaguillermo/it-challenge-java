@@ -1,0 +1,48 @@
+package it.java.challenge.validator;
+
+import java.util.Date;
+
+import javax.validation.ConstraintValidator;
+import javax.validation.ConstraintValidatorContext;
+
+import org.springframework.beans.BeanUtils;
+
+import it.java.challenge.model.*;
+
+//public class GreaterDateValidator implements ConstraintValidator<GreaterDate, Carrera> {
+	public class GreaterDateValidator implements ConstraintValidator<GreaterDate, Object> {
+
+	private String firstDate;
+	private String secondDate;
+
+	@Override
+	public void initialize(GreaterDate constraintAnnotation) {
+		firstDate = constraintAnnotation.first();
+		secondDate = constraintAnnotation.second();
+	}
+
+	@Override
+	public boolean isValid(final Object value, ConstraintValidatorContext context) {
+//		public boolean isValid(Carrera value, ConstraintValidatorContext context) {
+		try {
+			Date firstObj = (Date) BeanUtils.getPropertyDescriptor(value.getClass(), firstDate);
+			Date secondObj = (Date) BeanUtils.getPropertyDescriptor(value.getClass(), secondDate);
+//			Integer firstObj = value.getClass().getField(firstDate).getInt(value);
+//			Integer secondObj = value.getClass().getField(secondDate).getInt(value);
+//
+//			System.out.println("firstObj: " + firstObj);
+//			System.out.println("secondObj: " + secondObj);
+//			Date fechadesde = value.getFechadesde();
+//			Date fechahasta = value.getFechahasta();
+//			return fechadesde == null && fechahasta == null
+//					|| fechadesde != null && fechahasta != null && fechadesde.compareTo(fechahasta) < 0;
+			return firstObj == null && secondObj == null || firstObj != null && secondObj != null && firstObj.compareTo(secondObj) < 0;
+		} catch (final Exception ignore) {
+			// ignore
+//			return false;
+		}
+		return true;
+
+	}
+
+}

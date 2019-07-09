@@ -1,0 +1,172 @@
+package app;
+
+import javax.sql.rowset.JdbcRowSet;
+
+import app.Persona;
+
+public class PersonaBean {
+
+	static final String JDBC_DRIVER =
+		      "com.mysql.jdbc.Driver";
+		   static final String DB_URL =
+				   "jdbc:postgresql://localhost:5432/";
+		   static final String DB_USER = "admin";
+		   static final String DB_PASS = "admin";
+		   private JdbcRowSet rowSet = null;
+		   public PersonaBean() {
+		      try {
+		         Class.forName(JDBC_DRIVER);
+		         rowSet = new JdbcRowSetImpl();
+		         rowSet.setUrl(DB_URL);
+		         rowSet.setUsername(DB_USER);
+		         rowSet.setPassword(DB_PASS);
+		         rowSet.setCommand("SELECT * FROM Persona");
+		         rowSet.execute();
+
+		      catch (SQLException | ClassNotFoundException ex) {
+		         ex.printStackTrace();
+		      }
+		   }
+		   public Persona create(Persona p) {
+		      try {
+		         rowSet.moveToInsertRow();
+		         rowSet.updateInt("personId", p.getPersonId());
+		         rowSet.updateString("firstName", p.getFirstName());
+		         rowSet.updateString("middleName", p.getMiddleName());
+		         rowSet.updateString("lastName", p.getLastName());
+		         rowSet.updateString("email", p.getEmail());
+		         rowSet.updateString("phone", p.getPhone());
+		         rowSet.insertRow();
+		         rowSet.moveToCurrentRow();
+		      } catch (SQLException ex) {
+		         try {
+		            rowSet.rollback();
+		            p = null;
+		         } catch (SQLException e) {
+
+		         }
+		         ex.printStackTrace();
+		      }
+		      return p;
+		   }
+
+		   public Persona update(Persona p) {
+		      try {
+		         rowSet.updateString("firstName", p.getFirstName());
+		         rowSet.updateString("middleName", p.getMiddleName());
+		         rowSet.updateString("lastName", p.getLastName());
+		         rowSet.updateString("email", p.getEmail());
+		         rowSet.updateString("phone", p.getPhone());
+		         rowSet.updateRow();
+		         rowSet.moveToCurrentRow();
+		      } catch (SQLException ex) {
+		         try {
+		            rowSet.rollback();
+		         } catch (SQLException e) {
+
+		         }
+		         ex.printStackTrace();
+		      }
+		      return p;
+		   }
+
+		   public void delete() {
+		      try {
+		         rowSet.moveToCurrentRow();
+		         rowSet.deleteRow();
+		      } catch (SQLException ex) {
+		         try {
+		            rowSet.rollback();
+		         } catch (SQLException e) { }
+		         ex.printStackTrace();
+		      }
+
+		   }
+
+		   public Persona moveFirst() {
+		      Persona p = new Persona();
+		      try {
+		         rowSet.first();
+		         p.setPersonId(rowSet.getInt("personId"));
+		         p.setFirstName(rowSet.getString("firstName"));
+		         p.setMiddleName(rowSet.getString("middleName"));
+		         p.setLastName(rowSet.getString("lastName"));
+		         p.setEmail(rowSet.getString("email"));
+		         p.setPhone(rowSet.getString("phone"));
+
+		      } catch (SQLException ex) {
+		         ex.printStackTrace();
+		      }
+		      return p;
+		   }
+
+		   public Persona moveLast() {
+		      Persona p = new Persona();
+		      try {
+		         rowSet.last();
+		         p.setPersonId(rowSet.getInt("personId"));
+		         p.setFirstName(rowSet.getString("firstName"));
+		         p.setMiddleName(rowSet.getString("middleName"));
+		         p.setLastName(rowSet.getString("lastName"));
+		         p.setEmail(rowSet.getString("email"));
+		         p.setPhone(rowSet.getString("phone"));
+
+		      } catch (SQLException ex) {
+		         ex.printStackTrace();
+		      }
+		      return p;
+		   }
+
+		   public Persona moveNext() {
+		      Persona p = new Persona();
+		      try {
+		         if (rowSet.next() == false)
+		            rowSet.previous();
+		         p.setPersonId(rowSet.getInt("personId"));
+		         p.setFirstName(rowSet.getString("firstName"));
+		         p.setMiddleName(rowSet.getString("middleName"));
+		         p.setLastName(rowSet.getString("lastName"));
+		         p.setEmail(rowSet.getString("email"));
+		         p.setPhone(rowSet.getString("phone"));
+
+		      } catch (SQLException ex) {
+		         ex.printStackTrace();
+		      }
+		      return p;
+		   }
+
+		   public Persona movePrevious() {
+		      Persona p = new Persona();
+		      try {
+		         if (rowSet.previous() == false)
+		            rowSet.next();
+		         p.setPersonId(rowSet.getInt("personId"));
+		         p.setFirstName(rowSet.getString("firstName"));
+		         p.setMiddleName(rowSet.getString("middleName"));
+		         p.setLastName(rowSet.getString("lastName"));
+		         p.setEmail(rowSet.getString("email"));
+		         p.setPhone(rowSet.getString("phone"));
+
+		      } catch (SQLException ex) {
+		         ex.printStackTrace();
+		      }
+		      return p;
+		   }
+
+		   public Persona getCurrent() {
+		      Persona p = new Persona();
+		      try {
+		         rowSet.moveToCurrentRow();
+		         p.setPersonId(rowSet.getInt("personId"));
+		         p.setFirstName(rowSet.getString("firstName"));
+		         p.setMiddleName(rowSet.getString("middleName"));
+		         p.setLastName(rowSet.getString("lastName"));
+		         p.setEmail(rowSet.getString("email"));
+		         p.setPhone(rowSet.getString("phone"));
+		      } catch (SQLException ex) {
+		         ex.printStackTrace();
+		      }
+		      return p;
+		   }
+
+}

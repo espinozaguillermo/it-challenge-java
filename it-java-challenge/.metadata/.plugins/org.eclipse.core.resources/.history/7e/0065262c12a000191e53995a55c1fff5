@@ -1,0 +1,5 @@
+package it.java.challenge.exception;
+
+public class ErrorDetails {
+
+}

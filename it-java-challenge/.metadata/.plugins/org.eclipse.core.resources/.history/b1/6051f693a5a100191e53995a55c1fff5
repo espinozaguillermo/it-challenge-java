@@ -1,0 +1,41 @@
+package it.java.challenge.validator;
+
+import java.util.Calendar;
+import java.util.List;
+
+import javax.validation.ConstraintValidator;
+import javax.validation.ConstraintValidatorContext;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import it.java.challenge.model.*;
+import it.java.challenge.repository.*;
+
+/**
+ * Valida el alumno tenga una inscripcioncarrera en la misma carrera del curso 
+ */
+public class AlumnoInscripcionCursoValidator implements ConstraintValidator<AlumnoInscripcionCurso, InscripcionesCurso> {
+
+	@Autowired
+	private InscripcionesCarreraRepository inscripcionesCarreraRepository;
+	
+	@Override
+	public void initialize(AlumnoInscripcionCurso constraintAnnotation) {
+	}
+
+	@Override
+	public boolean isValid(InscripcionesCurso inscripcioncurso, ConstraintValidatorContext context) {
+		if (inscripcioncurso == null) {
+			return true;
+		}
+		
+		try {
+			List<InscripcionesCarrera> listinscripcioncarrera = inscripcionesCarreraRepository.findByCarreraAndAlumno(inscripcioncurso.getCurso().getCarrera(), inscripcioncurso.getAlumno());
+			System.out.println("curso " + inscripcioncurso.getCurso().getId() + " carrera " + inscripcioncurso.getCurso().getCarrera().getId() + " alumnoinscripcion " + listinscripcioncarrera.size());
+			return listinscripcioncarrera.size() > 0;
+		} catch (final Exception ignore) {
+		}
+		return true;
+	}
+
+}

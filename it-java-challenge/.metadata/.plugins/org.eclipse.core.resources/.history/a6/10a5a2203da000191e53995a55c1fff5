@@ -1,0 +1,117 @@
+package it.java.challenge.model;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "curso")
+public class Curso {
+	private Integer id;
+	private Docente docente;
+	private Carrera carrera;
+	private String nombre;
+	private String descripcion;
+	private Integer cupomaximo;
+	private Integer anio;
+	private Integer calificacionaprobada;
+
+	public Curso() {
+	}
+
+	public Curso(Docente newDocente, Carrera newCarrera, String newNombre, String newDescripcion, Integer newCupomaximo, Integer newAnio, Integer newCalificacionaprobada) {
+		docente = newDocente;
+		carrera = newCarrera;
+		nombre = newNombre;
+		descripcion = newDescripcion;
+		cupomaximo = newCupomaximo;
+		anio = newAnio;
+		calificacionaprobada = newCalificacionaprobada;
+	}
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer newId) {
+		this.id = newId;
+	}
+	
+	@OneToOne
+	@JoinColumn(name = "iddocente")
+	public Docente getDocente() {
+		return docente;
+	}
+	
+	public void setDocente(Docente newDocente) {
+		this.docente = newDocente;
+	}
+	
+	@OneToOne
+	@JoinColumn(name = "idcarrera")
+	public Carrera getCarrera() {
+		return carrera;
+	}
+	
+	public void setCarrera(Carrera newCarrera) {
+		this.carrera = newCarrera;
+	}
+
+	@Column(name = "nombre", nullable = false)
+	public String getNombre() {
+		return nombre;
+	}
+
+	public void setNombre(String newNombre) {
+		this.nombre = newNombre;
+	}
+
+	@Column(name = "descripcion", nullable = false)
+	public String getDescripcion() {
+		return descripcion;
+	}
+
+	public void setDescripcion(String newDescripcion) {
+		this.descripcion = newDescripcion;
+	}
+	
+	@Column(name = "cupomaximo", nullable = false)
+	public Integer getCupomaximo() {
+		return cupomaximo;
+	}
+	
+	public void setCupomaximo(Integer newCupomaximo) {
+		this.cupomaximo = newCupomaximo;
+	}
+
+	@Column(name = "anio", nullable = false)
+	public Integer getAnio() {
+		return anio;
+	}
+	
+	public void setAnio(Integer newAnio) {
+		this.anio = newAnio;
+	}
+
+    @Column(name = "calificacionaprobada", nullable = false)
+	public Integer getCalificacionaprobada() {
+		return calificacionaprobada;
+	}
+    
+	public void setCalificacionaprobada(Integer newCalificacionaprobada) {
+		this.calificacionaprobada = newCalificacionaprobada;
+	}
+
+	@Override
+	public String toString() {
+		return "Carrera [id=" + id + ", docente=" + docente.toString() + ", carrera=" + carrera.toString() + ", nombre=" + nombre + ", descripcion=" + descripcion + ", cupomaximo=" + cupomaximo + ", anio=" + anio + ", calificacionaprobada=" + calificacionaprobada + "]";
+	}
+
+}

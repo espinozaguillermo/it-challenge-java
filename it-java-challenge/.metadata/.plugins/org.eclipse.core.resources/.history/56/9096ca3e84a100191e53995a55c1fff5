@@ -1,0 +1,55 @@
+package it.java.challenge.validator;
+
+import java.util.Date;
+import java.util.Optional;
+
+import javax.validation.ConstraintValidator;
+import javax.validation.ConstraintValidatorContext;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import it.java.challenge.model.InscripcionesCarrera;
+import it.java.challenge.repository.CarreraRepository;
+import it.java.challenge.model.Carrera;
+
+public class FechaInscripcionCarreraValidator implements ConstraintValidator<FechaInscripcionCarrera, InscripcionesCarrera> {
+
+	@Autowired
+	private CarreraRepository carreraRepository;
+	
+	@Override
+	public void initialize(FechaInscripcionCarrera constraintAnnotation) {
+	}
+
+	@Override
+	public boolean isValid(InscripcionesCarrera inscripcioncarrera, ConstraintValidatorContext context) {
+		if (inscripcioncarrera == null) {
+			return true;
+		}
+		
+		try {
+			Date fechainscripcion = inscripcioncarrera.getFechainscripcion();
+			Carrera carrera;
+			Optional<Carrera> optcarrera = carreraRepository.findById(curso.getCarrera().getId());
+			if (optcarrera.isPresent()) {
+				carrera = optcarrera.get();
+				if (carrera != null) {
+					Date fechadesde = carrera.getFechadesde();
+					Date fechahasta = null;
+					if (carrera.getFechahasta()) {
+						fechahasta = carrera.getFechahasta();	
+					}
+					if (fechadesde != null && fechahasta != null) {
+						return fechainscripcion.compareTo(fechadesde) >= 0 && fechainscripcion.compareTo(fechahasta) <= 0;
+					} else {
+						return fechadesde != null && fechahasta == null && fechainscripcion.compareTo(fechadesde) >= 0;
+					}
+				}
+			}
+			return false;
+		} catch (final Exception ignore) {
+		}
+		return true;
+	}
+
+}

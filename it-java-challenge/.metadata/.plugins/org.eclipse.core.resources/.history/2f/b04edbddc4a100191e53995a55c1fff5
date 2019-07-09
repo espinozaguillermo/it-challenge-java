@@ -1,0 +1,74 @@
+package it.java.challenge.controller;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.validation.Valid;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import it.java.challenge.model.InscripcionesCarrera;
+import it.java.challenge.repository.InscripcionesCarreraRepository;
+import it.java.challenge.exception.ResourceNotFoundException;
+
+@RestController
+@RequestMapping("/api/v1")
+public class InscripcionesCarreraController {
+
+	@Autowired
+	private InscripcionesCarreraRepository inscripcionescarreraRepository;
+
+	@GetMapping("/inscripcionescarreras")
+	public List<InscripcionesCarrera> getAllInscripcionesCarreras() {
+		return inscripcionescarreraRepository.findAll();
+	}
+
+	@GetMapping("/inscripcionescarreras/{id}")
+	public ResponseEntity<InscripcionesCarrera> getInscripcionesCarreraById(@PathVariable(value = "id") Integer inscripcionescarreraId)
+			throws ResourceNotFoundException {
+		InscripcionesCarrera inscripcionescarrera = inscripcionescarreraRepository.findById(inscripcionescarreraId)
+				.orElseThrow(() -> new ResourceNotFoundException("InscripcionesCarrera no encontrada id :: " + inscripcionescarreraId));
+		return ResponseEntity.ok().body(inscripcionescarrera);
+	}
+
+	@PostMapping("/inscripcionescarreras")
+	public InscripcionesCarrera createInscripcionesCarrera(@Valid @RequestBody InscripcionesCarrera inscripcionescarrera) {
+		return inscripcionescarreraRepository.save(inscripcionescarrera);
+	}
+
+	@PutMapping("/inscripcionescarreras/{id}")
+	public ResponseEntity<InscripcionesCarrera> updateInscripcionesCarrera(@PathVariable(value = "id") Integer inscripcionescarreraId,
+			@Valid @RequestBody InscripcionesCarrera inscripcionescarreraDetails) throws ResourceNotFoundException {
+		InscripcionesCarrera inscripcionescarrera = inscripcionescarreraRepository.findById(inscripcionescarreraId)
+				.orElseThrow(() -> new ResourceNotFoundException("InscripcionesCarrera no encontrada id :: " + inscripcionescarreraId));
+
+		inscripcionescarrera.setAlumno(inscripcionescarreraDetails.getAlumno());
+		inscripcionescarrera.setCarrera(inscripcionescarreraDetails.getCarrera());
+		inscripcionescarrera.setFechainscripcion(inscripcionescarreraDetails.getFechainscripcion());
+		final InscripcionesCarrera updatedInscripcionesCarrera = inscripcionescarreraRepository.save(inscripcionescarrera);
+		return ResponseEntity.ok(updatedInscripcionesCarrera);
+	}
+
+	@DeleteMapping("/inscripcionescarreras/{id}")
+	public Map<String, Boolean> deleteInscripcionesCarrera(@PathVariable(value = "id") Integer inscripcionescarreraId)
+			throws ResourceNotFoundException {
+		InscripcionesCarrera inscripcionescarrera = inscripcionescarreraRepository.findById(inscripcionescarreraId)
+				.orElseThrow(() -> new ResourceNotFoundException("InscripcionesCarrera no encontrada id :: " + inscripcionescarreraId));
+
+		inscripcionescarreraRepository.delete(inscripcionescarrera);
+		Map<String, Boolean> response = new HashMap<>();
+		response.put("eliminado", Boolean.TRUE);
+		return response;
+	}
+
+}

@@ -1,0 +1,40 @@
+package it.java.challenge.validator;
+
+import java.util.Calendar;
+import java.util.Date;
+import javax.validation.ConstraintValidator;
+import javax.validation.ConstraintValidatorContext;
+import it.java.challenge.model.Carrera;
+import it.java.challenge.model.Curso;
+
+public class AnioCursoValidator implements ConstraintValidator<AnioCurso, Curso> {
+
+	@Override
+	public void initialize(AnioCurso constraintAnnotation) {
+	}
+
+	@Override
+	public boolean isValid(Curso curso, ConstraintValidatorContext context) {
+		return false;
+//		try {
+//			Integer anio = curso.getAnio();
+//			Carrera carrera = curso.getCarrera();
+//			Date fechadesde = carrera.getFechadesde();
+//			Date fechahasta = carrera.getFechahasta();
+//			Calendar calendardesde = Calendar.getInstance();
+//			calendardesde.setTime(fechadesde);
+//			Calendar calendarhasta = Calendar.getInstance();
+//			calendarhasta.setTime(fechahasta);
+//			
+////			if (fechadesde != null && fechahasta != null) {
+////				return anio >= calendardesde.get(Calendar.YEAR) && anio <= calendarhasta.get(Calendar.YEAR);
+////			} else {
+////				return fechadesde != null && anio >= calendardesde.get(Calendar.YEAR) && fechahasta == null;
+////			}
+//		} catch (final Exception ignore) {
+//			// ignore
+//		}
+//		return true;
+	}
+
+}

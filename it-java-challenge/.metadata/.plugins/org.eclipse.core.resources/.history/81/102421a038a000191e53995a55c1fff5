@@ -1,0 +1,73 @@
+package it.java.challenge.controller;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.validation.Valid;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import it.java.challenge.model.Alumno;
+import it.java.challenge.repository.AlumnoRepository;
+import it.java.challenge.exception.ResourceNotFoundException;
+
+@RestController
+@RequestMapping("/api/v1")
+public class CursoController {
+
+	@Autowired
+	private AlumnoRepository alumnoRepository;
+
+	@GetMapping("/alumnos")
+	public List<Alumno> getAllAlumnos() {
+		return alumnoRepository.findAll();
+	}
+
+	@GetMapping("/alumnos/{id}")
+	public ResponseEntity<Alumno> getAlumnoById(@PathVariable(value = "id") Integer alumnoId)
+			throws ResourceNotFoundException {
+		Alumno alumno = alumnoRepository.findById(alumnoId)
+				.orElseThrow(() -> new ResourceNotFoundException("Alumno no encontrada id :: " + alumnoId));
+		return ResponseEntity.ok().body(alumno);
+	}
+
+	@PostMapping("/alumnos")
+	public Alumno createAlumno(@Valid @RequestBody Alumno alumno) {
+		return alumnoRepository.save(alumno);
+	}
+
+	@PutMapping("/alumnos/{id}")
+	public ResponseEntity<Alumno> updateAlumno(@PathVariable(value = "id") Integer alumnoId,
+			@Valid @RequestBody Alumno alumnoDetails) throws ResourceNotFoundException {
+		Alumno alumno = alumnoRepository.findById(alumnoId)
+				.orElseThrow(() -> new ResourceNotFoundException("Alumno no encontrada id :: " + alumnoId));
+
+		alumno.setPersona(alumnoDetails.getPersona());
+		alumno.setLegajo(alumnoDetails.getLegajo());
+		final Alumno updatedAlumno = alumnoRepository.save(alumno);
+		return ResponseEntity.ok(updatedAlumno);
+	}
+
+	@DeleteMapping("/alumnos/{id}")
+	public Map<String, Boolean> deleteAlumno(@PathVariable(value = "id") Integer alumnoId)
+			throws ResourceNotFoundException {
+		Alumno alumno = alumnoRepository.findById(alumnoId)
+				.orElseThrow(() -> new ResourceNotFoundException("Alumno no encontrada id :: " + alumnoId));
+
+		alumnoRepository.delete(alumno);
+		Map<String, Boolean> response = new HashMap<>();
+		response.put("eliminado", Boolean.TRUE);
+		return response;
+	}
+
+}

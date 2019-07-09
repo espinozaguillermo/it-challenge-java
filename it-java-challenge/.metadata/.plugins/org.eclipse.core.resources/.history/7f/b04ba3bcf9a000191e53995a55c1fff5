@@ -1,0 +1,5 @@
+package it.java.challenge.validator;
+
+public class StringEnumerationValidator {
+
+}

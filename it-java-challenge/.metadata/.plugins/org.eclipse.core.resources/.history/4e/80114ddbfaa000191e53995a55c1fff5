@@ -1,0 +1,27 @@
+package it.java.challenge.validator;
+
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
+
+import javax.validation.Constraint;
+import javax.validation.Payload;
+
+@Documented
+@Target(ElementType.FIELD) //METHOD, CONSTRUCTOR, etc.
+@Retention(RetentionPolicy.RUNTIME)
+@Constraint(validatedBy = StringEnumerationValidator.class)
+//@Constraint(validatedBy = StringEnumerationValidator.class)
+//@Target({ METHOD, FIELD, ANNOTATION_TYPE, PARAMETER, CONSTRUCTOR })
+//@Retention(RUNTIME)
+public @interface StringEnumeration {
+
+	String message() default "{com.xxx.bean.validation.constraints.StringEnumeration.message}";
+
+	Class<?>[] groups() default {};
+
+	Class<? extends Payload>[] payload() default {};
+
+	Class<? extends Enum<?>> enumClass();
+
+}

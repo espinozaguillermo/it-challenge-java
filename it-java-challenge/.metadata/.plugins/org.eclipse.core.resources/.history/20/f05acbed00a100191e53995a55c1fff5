@@ -1,0 +1,43 @@
+package it.java.challenge.validator;
+
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.RetentionPolicy;
+
+import javax.validation.Constraint;
+import javax.validation.Payload;
+
+@Documented
+@Target({ElementType.TYPE, ElementType.ANNOTATION_TYPE}) //METHOD, CONSTRUCTOR, etc.
+@Retention(RetentionPolicy.RUNTIME)
+@Constraint(validatedBy = DateValidator.class)
+public @interface Date {
+
+	String message() default "{com.xxx.bean.validation.constraints.Date.message}";
+
+	Class<?>[] groups() default {};
+
+	Class<? extends Payload>[] payload() default {};
+
+//	Class<? extends Enum<?>> enumClass();
+	
+	Date first();
+	
+	Date second();
+	
+	/**
+     * Defines several <code>@FieldMatch</code> annotations on the same element
+     *
+     * @see FieldMatch
+     */
+    @Target({ElementType.TYPE, ElementType.ANNOTATION_TYPE})
+    @Retention(RetentionPolicy.RUNTIME)
+    @Documented
+            @interface List
+    {
+        FieldMatch[] value();
+    }
+
+}

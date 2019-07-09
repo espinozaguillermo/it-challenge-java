@@ -1,0 +1,34 @@
+package it.java.challenge.validator;
+
+import javax.validation.ConstraintValidator;
+import javax.validation.ConstraintValidatorContext;
+
+public class GreaterDateValidator implements ConstraintValidator<GreaterDate, Object> {
+
+	private String firstDate;
+	private String secondDate;
+
+	@Override
+	public void initialize(GreaterDate constraintAnnotation) {
+		firstDate = constraintAnnotation.first();
+		secondDate = constraintAnnotation.second();
+	}
+
+	@Override
+	public boolean isValid(final Object value, ConstraintValidatorContext context) {
+		try {
+//			final Object firstObj = BeanUtils.getPropertyDescriptor(value.getClass(), firstDate);
+//			final Object secondObj = BeanUtils.getPropertyDescriptor(value.getClass(), secondDate);
+			Integer firstObj = value.getClass().getField(firstDate).getInt(value);
+			Integer secondObj = value.getClass().getField(secondDate).getInt(value);
+
+			return firstObj == null && secondObj == null
+					|| firstObj != null && secondObj != null && secondObj > firstObj;
+		} catch (final Exception ignore) {
+			// ignore
+		}
+		return true;
+
+	}
+
+}

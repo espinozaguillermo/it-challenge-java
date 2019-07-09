@@ -1,0 +1,58 @@
+package it.java.challenge.validator;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Optional;
+
+import javax.validation.ConstraintValidator;
+import javax.validation.ConstraintValidatorContext;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import it.java.challenge.model.Carrera;
+import it.java.challenge.model.Curso;
+import it.java.challenge.repository.CarreraRepository;
+
+public class AnioCursoValidator implements ConstraintValidator<AnioCurso, Curso> {
+
+	@Autowired
+	private CarreraRepository carreraRepository;
+
+	@Override
+	public void initialize(AnioCurso constraintAnnotation) {
+	}
+
+	@Override
+	public boolean isValid(Curso curso, ConstraintValidatorContext context) {
+		try {
+			Integer anio = curso.getAnio();
+			Carrera carrera;
+			Optional<Carrera> optcarrera = carreraRepository.findById(curso.getCarrera().getId());
+			if (optcarrera.isPresent()) {
+				carrera = optcarrera.get();
+				if (carrera != null) {
+					Date fechadesde = carrera.getFechadesde();
+					Date fechahasta = carrera.getFechahasta();
+					Calendar calendardesde = Calendar.getInstance();
+					calendardesde.setTime(fechadesde);
+					Calendar calendarhasta = Calendar.getInstance();
+					calendarhasta.setTime(fechahasta);
+					if (fechadesde != null && fechahasta != null) {
+//						return anio >= calendardesde.get(Calendar.YEAR) && anio <= calendarhasta.get(Calendar.YEAR);
+						return false;
+					} else {
+//						return fechadesde != null && anio >= calendardesde.get(Calendar.YEAR) && fechahasta == null;
+						return false;
+					}
+				}
+			}
+			return false;
+		} catch (final Exception ignore) {
+			// ignore
+			System.out.println(ignore.getMessage());
+			return false;
+		}
+//		return true;
+	}
+
+}

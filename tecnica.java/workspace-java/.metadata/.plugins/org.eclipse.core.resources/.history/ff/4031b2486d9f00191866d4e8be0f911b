@@ -1,0 +1,172 @@
+package app;
+
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+import java.awt.event.ActionListener;
+import java.util.Date;
+
+import javax.swing.*;
+import javax.swing.border.EtchedBorder;
+import javax.swing.border.TitledBorder;
+
+import net.miginfocom.swing.MigLayout;
+
+
+public class PersonaUI extends JPanel {
+
+//	private JTextField idField = new JTextField(10);
+	   private JTextField nombreField = new JTextField(40);
+	   private JTextField apellidoField = new JTextField(40);
+	   private JTextField tipodocField = new JTextField(30);
+	   private JTextField documentoField = new JTextField(30);
+	   private JTextField fechanacField = new JTextField(30);
+
+	   //... mNameField, lNameField, emailField, phoneField
+
+	   private JButton createButton = new JButton("New...");
+	   //... updateButton, deleteButton, firstButton, prevButton, nextButton,
+	   //...lastButton
+	   private PersonaBean bean = new PersonaBean();
+
+	   public PersonaUI() {
+	      setBorder(new TitledBorder
+	      (new EtchedBorder(),"Persona Details"));
+	      setLayout(new BorderLayout(5, 5));
+	      add(initFields(), BorderLayout.NORTH);
+	      add(initButtons(), BorderLayout.CENTER);
+//	      setFieldData(bean.moveFirst());
+	   }
+
+	   private JPanel initButtons() {
+	      JPanel panel = new JPanel();
+	      panel.setLayout(new FlowLayout(FlowLayout.CENTER, 3, 3));
+	      panel.add(createButton);
+	      createButton.addActionListener((ActionListener) new ButtonHandler());
+	      //...
+//	      panel.add(lastButton);
+//	      lastButton.addActionListener(new ButtonHandler());
+	      return panel;
+	   }
+
+	   private JPanel initFields() {
+	      JPanel panel = new JPanel();
+	      panel.setLayout(new MigLayout());
+//	      panel.add(new JLabel("ID"), "align label");
+//	      panel.add(idField, "wrap");
+//	      idField.setEnabled(false);
+	      panel.add(new JLabel("Nombre"), "align label");
+	      panel.add(nombreField, "wrap");
+	      panel.add(new JLabel("Apellido"), "align label");
+	      panel.add(apellidoField, "wrap");
+	      panel.add(new JLabel("Tipo Documento"), "align label");
+	      panel.add(tipodocField, "wrap");
+	      panel.add(new JLabel("Documento"), "align label");
+	      panel.add(documentoField, "wrap");
+	      panel.add(new JLabel("Fecha Nacimiento"), "align label");
+	      panel.add(fechanacField, "wrap");
+	      //...
+//	      panel.add(new JLabel("Phone"), "align label");
+//	      panel.add(phoneField, "wrap");
+	      return panel;
+	   }
+
+	   private Persona getFieldData() {
+	      Persona p = new Persona();
+	      p.setNombre(nombreField.getText());
+	      p.setApellido(apellidoField.getText());
+	      p.setTipoDocumento(tipoDoc.getText());
+	      p.setNroDocumento(documentoField.getText());
+	      p.setFechaNacimiento(fechanacField.getText());
+//	      p.setPersonId(Integer.parseInt(idField.getText()));
+//	      p.setFirstName(fNameField.getText());
+//	      p.setMiddleName(mNameField.getText());
+//	      p.setLastName(lNameField.getText());
+//	      p.setEmail(emailField.getText());
+//	      p.setPhone(phoneField.getText());
+	      return p;
+	   }
+
+	   private void setFieldData(Persona p) {
+//	      idField.setText(String.valueOf(p.getPersonId()));
+	      nombreField.setText(p.getNombre());
+	      apellidoField.setText(p.getApellido());
+	      tipodocField.setText(p.getTipoDocumento().toString());
+	      documentoField.setText(p.getNroDocumento());
+	      fechanacField.setText(p.getFechaNacimiento().toString());
+	   }
+
+	   private boolean isEmptyFieldData() {
+	      return (nombreField.getText().trim().isEmpty()
+	         && apellidoField.getText().trim().isEmpty()
+	         && tipodocField.getText().trim().isEmpty()
+	         && documentoField.getText().trim().isEmpty()
+	         && fechanacField.getText().trim().isEmpty());
+	   }
+
+	   private class ButtonHandler implements ActionListener {
+	      @Override
+	      public void actionPerformed(ActionEvent e) {
+	         Persona p = getFieldData();
+	         switch (e.getActionCommand()) {
+	         case "Save":
+	            if (isEmptyFieldData()) {
+	               JOptionPane.showMessageDialog(null,
+	               "No se puede guardar con valores vacios");
+	               return;
+	            }
+	            if (bean.create(p) != null)
+	               JOptionPane.showMessageDialog(null,
+	               "New Persona creada!");
+	               createButton.setText("Nuevo...");
+	               break;
+	         case "Nuevo...":
+//	            p.setPersonId(new Random()
+//	            .nextInt(Integer.MAX_VALUE) + 1);
+	            p.setNombre("");
+	  	        p.setApellido("");
+	  	        p.setTipoDocumento("");
+	  	        p.setNroDocumento(0);
+	  	        p.setFechaNacimiento(new Date());
+	            setFieldData(p);
+	            createButton.setText("Save");
+	            break;
+	         case "Update":
+	            if (isEmptyFieldData()) {
+	               JOptionPane.showMessageDialog(null,
+	               "Cannot update an empty record");
+	               return;
+	            }
+	            if (bean.update(p) != null)
+	               JOptionPane.showMessageDialog(
+	               null,"Persona with ID:" + String.valueOf(p.getPersonId()
+	               + " is updated successfully"));
+	               break;
+	         case "Delete":
+	            if (isEmptyFieldData()) {
+	               JOptionPane.showMessageDialog(null,
+	               "Cannot delete an empty record");
+	               return;
+	            }
+	            p = bean.getCurrent();
+	            bean.delete();
+	            JOptionPane.showMessageDialog(
+	               null,"Persona with ID:"
+	               + String.valueOf(p.getIdentificador()
+	               + " is deleted successfully"));
+	               break;
+//	         case "First":
+//	            setFieldData(bean.moveFirst()); break;
+//	         case "Previous":
+//	            setFieldData(bean.movePrevious()); break;
+//	         case "Next":
+//	            setFieldData(bean.moveNext()); break;
+//	         case "Last":
+//	            setFieldData(bean.moveLast()); break;
+	         default:
+	            JOptionPane.showMessageDialog(null,
+	            "invalid command");
+	         }
+	      }
+	   }
+
+}

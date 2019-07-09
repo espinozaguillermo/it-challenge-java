@@ -120,10 +120,10 @@ Para editar hay que cambiar el tipo de request por PUT con los mismos campos en 
 
 Algunas mejoras que se pueden hacer 
 
-- Tests
-- Paginación
-- Filtros
-- Formularios
+- Mejorar Paginación
+- Agregar Tests
+- Agregar más Filtros
+- Agregar Formularios
 
 --
 
